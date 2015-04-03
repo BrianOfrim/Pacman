@@ -1,12 +1,12 @@
 import sys, pygame
-
+from graph_V2 import Graph
 
 class GUI():
     BG_COLOR = (32, 32, 32)
 
     
     def __init__(self,screen_height,screen_width,
-                 score_rect=(0,500,600,100),score_color =(0,0,255) ):
+                 score_rect=(0,500,600,100),score_color =(0,0,255)):
 
         #Initialize screen
         self.screen = pygame.display.set_mode((screen_width,screen_height))
@@ -22,4 +22,9 @@ class GUI():
     def draw_rect(self,screen,color,rect):
         pygame.draw.rect(screen,color,rect)
 
+    def draw_map(self,level_map):
+        edges = list()
+        verticies = set()
+        
+    
     
