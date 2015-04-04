@@ -1,0 +1,49 @@
+class unit(Sprite):
+    """
+    this is the base unit class that will be inherited by the pacman class and 
+    the ghost class. It will just generally have to do with any object that is
+    printed to the map.
+    """
+    active_units = pygame.sprite.LayeredUpdates()
+    
+    health_font = bmpfont.BitmapFont("assets/healthfont.png", 6, 7, 48)
+    
+    def __init__(self,
+                 loc_x = None,
+                 loc_y = None,
+                 activate = False,
+                 **keywords):
+        
+        Sprite.__init__(self)
+        
+        self.loc_x = loc_x
+        self.loc_y = loc_y
+                
+        #Some default values so that nothing complains when trying to
+        #assign later
+        self._moving = False
+        self._active = False
+        self._path = []
+        self.turn_state = [False, False]
+        
+        #Default unit stats
+        self.type = "Base Unit"
+        self.hit_effect = None
+        self.die_effect = effects.Explosion
+        self.move_sound = None
+        self.hit_sound = None
+        self.die_sound = "Explosion"
+
+        #The phyiscal size for fitting in a transport
+        self.unit_size = 20
+              
+        #Dictionary of movement costs by tile type name
+        self._move_costs = {}
+        
+        #set required pygame things.
+        self.image = None
+        self.rect = pygame.Rect(0, 0, SIZE, SIZE)
+        self._update_image()
+        
+        if activate:
+            self.activate()
