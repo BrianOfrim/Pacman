@@ -99,4 +99,6 @@ class GUI():
         #pygame.display.update((50,50,25,25))
         self.pacman_and_pellets.add(pacguy)
         pacguy.start()
+        pacguy.update()
+        return pacguy
 

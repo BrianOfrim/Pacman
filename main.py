@@ -11,12 +11,18 @@ if __name__ == "__main__" :
     graph_tuple = main_gui.map()
     path_graph = graph_tuple[0]
     pac_dot_status = graph_tuple[1]
-    main_gui.print_pacman()
+    pacguy = main_gui.print_pacman()
+    
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if ((event.key == pygame.K_RIGHT) or (event.key == pygame.K_LEFT) or
+                    (event.key == pygame.K_UP) or (event.key == pygame.K_DOWN)):
+                    pacguy.MoveKeyDown(event.key)
+                    
         main_gui.draw_background()
         main_gui.map()
         main_gui.pacman_and_pellets.draw(main_gui.screen)
