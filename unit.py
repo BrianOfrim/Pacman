@@ -107,8 +107,22 @@ class pacman(Sprite):
                 self.image = pygame.transform.rotate(self.image,0)
             self.angle = 270
 
-    def MoveKeyDown(self,key): 
+    def move(self):
+        if self.angle == 0:
+            self.rect.x += 5
+        if self.angle == 90:
+            self.rect.y -= 5
+        if self.angle == 180:
+            self.rect.x -= 5
+        if self.angle == 270:
+            self.rect.y += 5
+        
+            
+    def MoveKeyDown(self,key):
         self.newangle(key)
+        
+        
+            
             
 
      #def pickup(self):

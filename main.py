@@ -18,10 +18,20 @@ if __name__ == "__main__" :
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 sys.exit()
+            
             elif event.type == pygame.KEYDOWN:
                 if ((event.key == pygame.K_RIGHT) or (event.key == pygame.K_LEFT) or
                     (event.key == pygame.K_UP) or (event.key == pygame.K_DOWN)):
                     pacguy.MoveKeyDown(event.key)
+        pacguy.move()
+        pellet_hit_list = pygame.sprite.spritecollide(pacguy, main_gui.pellet_list, False)
+        
+        for pellet in pellet_hit_list:
+            pacguy.score += 100
+            print(pacguy.score)
+            
+            pellet.kill()
+        
                     
         main_gui.draw_background()
         main_gui.map()
