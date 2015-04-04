@@ -1,6 +1,7 @@
 import sys, pygame
 from graph_v2 import Graph
 from pellet import Pellet
+from unit import pacman
 pacmancoord = [100,100]
 class GUI():
     BG_COLOR = (32, 32, 32)
@@ -75,7 +76,7 @@ class GUI():
                         pellet.rect.x = 25*x+12
                         pellet.rect.y = 25*y+12
                         self.pellet_list.add(pellet)
-                        #self.pacman_and_pacman(pellet)
+                        self.pacman_and_pellets.add(pellet)
                     verticies.add((x*tile_dim, y*tile_dim))
                     pac_dot_status[(x*tile_dim, y*tile_dim)] = 1
                     #check for left neighbour
@@ -92,9 +93,10 @@ class GUI():
     
                 
     def print_pacman(self):
-        pacman = pygame.image.load("Assets/pacman.png")
+        pacguy = pacman()
         #rect = pacman.get_rect()
         #self.screen.blit(pacman,[50,50])
         #pygame.display.update((50,50,25,25))
-        self.screen.blit(pacman,[pacmancoord[0],pacmancoord[1]])
-        pacmancoord[0] += 1
+        self.pacman_and_pellets.add(pacguy)
+        pacguy.start()
+

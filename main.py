@@ -19,7 +19,7 @@ if __name__ == "__main__" :
                 sys.exit()
         main_gui.draw_background()
         main_gui.map()
-        main_gui.pellet_list.draw(main_gui.screen)
-        main_gui.print_pacman()
+        main_gui.pacman_and_pellets.draw(main_gui.screen)
+      
         pygame.display.update()  
         clock.tick(60)
