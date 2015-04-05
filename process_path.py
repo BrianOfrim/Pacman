@@ -2,7 +2,7 @@
 import sys, pygame
 from graph_v2 import Graph
 from pellet import Pellet
-from unit import pacman
+#from unit import pacman
 from binary_heap import BinaryHeap
 import math
 
@@ -21,9 +21,11 @@ def closest_node(pacman_x,pacman_y,graph):
     return closest_vert[0]
 
 def next_node(current_node, graph, angle):
-    for neighbours in graph.neighbours(current_node):
+    neighbours = graph.neighbours(current_node)
+    for neighbour in neighbours:
+        print(neighbour)
         dx = neighbour[0]-current_node[0]
-        dy = neighbour[1]-currnet_node[1]
+        dy = neighbour[1]-current_node[1]
         if dx > 0:
             node_to_node_angle = 0
         elif dx < 0:
@@ -35,6 +37,13 @@ def next_node(current_node, graph, angle):
         if node_to_node_angle == angle:
             return neighbour
     return None
+
+def num_neighbours(current_node, graph, angle):
+    neighbours = graph.neighbours(current_node)
+    num_neighbours = 0
+    for neighbour in neighbours:    
+        num_neighbours += 1
+    return num_neighbours
 
         
 

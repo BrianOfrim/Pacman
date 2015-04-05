@@ -87,10 +87,14 @@ class GUI():
                     if(x!=0 and maparray[y][x-1] == 1):
                         edges.append(((x*tile_dim, y*tile_dim),
                                      ((x-1)*tile_dim, y*tile_dim)))
+                        edges.append((((x-1)*tile_dim, y*tile_dim),
+                                     (x*tile_dim, y*tile_dim)))                        
                     #check for upper neighbour
                     if(y!=0 and maparray[y-1][x] == 1):
                         edges.append(((x*tile_dim, y*tile_dim),
                                      (x*tile_dim, (y-1)*tile_dim)))
+                        edges.append(((x*tile_dim, (y-1)*tile_dim),
+                                     (x*tile_dim, y*tile_dim)))
         self.pellets_added = True
         return Graph(verticies,edges), pac_dot_status
                            

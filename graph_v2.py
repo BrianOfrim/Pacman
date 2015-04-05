@@ -91,7 +91,7 @@ class Graph:
             raise ValueError("an endpoint is not in graph")
 
         self._alist[e[0]].append(e[1])
-
+        #self._alist[e[1]].append(e[1])
     def is_vertex(self, v):
         """
         Check if vertex v is in the graph.
@@ -143,7 +143,7 @@ class Graph:
         raise a ValueError exception.
 
         Efficiency: O(1)
-
+        
         >>> Edges = [(1,2),(1,4),(3,1),(3,4),(2,4),(1,2)]
         >>> g = Graph({1,2,3,4}, Edges)
         >>> g.neighbours(1)
@@ -158,7 +158,7 @@ class Graph:
 
         if not self.is_vertex(v):
             raise ValueError("vertex not in graph")
-        
+        #print(v)
         return self._alist[v]
 
     def vertices(self):

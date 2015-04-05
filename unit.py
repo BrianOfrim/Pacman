@@ -1,4 +1,4 @@
-import pygame, gui 
+import pygame, gui, process_path
 from pygame.sprite import Sprite
 
 
@@ -26,7 +26,7 @@ class pacman(Sprite):
         #assign later
         self._moving = False
         self._alive = False
-        
+        self.map = None
        
         #Default unit stats
         self.move_sound = None
@@ -42,15 +42,22 @@ class pacman(Sprite):
         #self._moving = False
         #self._alive = False
         
-       
+        #move states: N = node to node D = decision
+        self.move_state = "N"
+        
         #Default unit stats
         #self.move_sound = None
         #self.hit_sound = None
         #self.die_sound
+        
         self.image = pacman.sprite.convert()
+        self.base_image = self.image
         self.rect = self.image.get_rect()
         self.image.set_colorkey((32,32,32))
         #def move(self):
+        self.current_node = None
+        self.next_node = None
+
 
     def die(self):
         self.lives = self.live - 1
@@ -67,48 +74,92 @@ class pacman(Sprite):
 
     def newangle(self,key):
         if (key == pygame.K_RIGHT):
-            if self.angle == 0:
-                self.image = pygame.transform.rotate(self.image,0)
-            if self.angle == 90:
-                self.image = pygame.transform.rotate(self.image,270)
-            if self.angle == 180:
-                self.image = pygame.transform.rotate(self.image,180)
-            if self.angle == 270:
-                self.image = pygame.transform.rotate(self.image,90)
+            self.image = pygame.transform.rotate(self.base_image,0)
             self.angle = 0
         if (key == pygame.K_LEFT):
-            if self.angle == 0:
-                self.image = pygame.transform.rotate(self.image,180)
-            if self.angle == 90:
-                self.image = pygame.transform.rotate(self.image,90)
-            if self.angle == 180:
-                self.image = pygame.transform.rotate(self.image,0)
-            if self.angle == 270:
-                self.image = pygame.transform.rotate(self.image,270)
+            self.image = pygame.transform.rotate(self.base_image,180)
             self.angle = 180
         if (key == pygame.K_UP):
-            if self.angle == 0:
-                self.image = pygame.transform.rotate(self.image,90)
-            if self.angle == 90:
-                self.image = pygame.transform.rotate(self.image,0)
-            if self.angle == 180:
-                self.image = pygame.transform.rotate(self.image,270)
-            if self.angle == 270:
-                self.image = pygame.transform.rotate(self.image,180)
+            self.image = pygame.transform.rotate(self.base_image,90)
             self.angle = 90
         if (key == pygame.K_DOWN):
-            if self.angle == 0:
-                self.image = pygame.transform.rotate(self.image,270)
-            if self.angle == 90:
-                self.image = pygame.transform.rotate(self.image,180)
-            if self.angle == 180:
-                self.image = pygame.transform.rotate(self.image,90)
-            if self.angle == 270:
-                self.image = pygame.transform.rotate(self.image,0)
+            self.image = pygame.transform.rotate(self.base_image,270)
             self.angle = 270
 
-    def MoveKeyDown(self,key): 
-        self.newangle(key)
+    def process_angle(self, key):
+        if (key == pygame.K_RIGHT):
+            requested_angle = 0
+        if (key == pygame.K_UP):
+            requested_angle = 90
+        if (key == pygame.K_LEFT):
+            requested_angle = 180
+        if (key == pygame.K_DOWN):
+            requested_angle = 270
+        #check if directions are opposite
+        if((requested_angle == ((self.angle + 180) % 360)) 
+           and (self.move_state == "N")):
+               self.angle = requested_angle
+               self.image = pygame.transform.rotate(self.base_image,self.angle)
+               temp_node = self.current_node
+               self.current_node = self.next_node
+               self.next_node = self.current_node
+               return
+        if (self.move_state == 'D'):
+            self.check_decision(requested_angle)
+
+           
+    def check_decision(self,requested_angle):
+        self.next_node = process_path.next_node(self.current_node, 
+                                                self.map, requested_angle)
+        if(self.next_node == None):
+            return 
+        self.angle = requested_angle
+        self.image = pygame.transform.rotate(self.base_image,self.angle)
+        self.move_state = 'N'
+        
+        
+
+        
+
+    def move(self):
+        if self.move_state == 'D': return
+        if self.angle == 0:
+            self.rect.x += 5
+        if self.angle == 90:
+            self.rect.y -= 5
+        if self.angle == 180:
+            self.rect.x -= 5
+        if self.angle == 270:
+            self.rect.y += 5
+        #change current node to next node
+        if((self.rect.x == self.next_node[0]) and 
+           (self.rect.y == self.next_node[1])):
+               self.current_node = self.next_node
+               num_neighbours = process_path.num_neighbours(self.current_node,
+                                                            self.map,
+                                                            self.angle)
+               if num_neighbours > 2:
+                   self.move_state = 'D'
+                   return
+               self.next_node = process_path.next_node(self.current_node,
+                                                       self.map,
+                                                       self.angle)
+               if(self.next_node == None):
+                   self.move_state = 'D'
+           
+               
+               
+
+    
+    
+    
+        
+            
+    def MoveKeyDown(self,key):
+        self.process_angle(key)
+        
+        
+            
             
 
      #def pickup(self):
