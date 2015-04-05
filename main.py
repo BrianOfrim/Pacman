@@ -8,17 +8,17 @@ if __name__ == "__main__" :
     clock = pygame.time.Clock()
     argv = sys.argv[1:]
     main_gui = GUI(screen_height, screen_width)
-    graph_tuple = main_gui.map()
-    path_graph = graph_tuple[0]
-    pac_dot_status = graph_tuple[1]
     pacguy = main_gui.print_pacman()
-    pacguy.map = path_graph
-    edge_list = path_graph.edges()
-    for edge in edge_list:
-        print(edge)
+    pacguy.map = main_gui.map()
+    edge_list = pacguy.map.edges()
+    #for edge in edge_list:
+    #    print(edge)
     
     pacguy.current_node = process_path.closest_node(pacguy.rect.x,
-                                                    pacguy.rect.y,path_graph)
+                                                    pacguy.rect.y,pacguy.map)
+    # sync graph with Pacman
+    pacguy.rect.x = pacguy.current_node[0]
+    pacguy.rect.y = pacguy.current_node[1]
     pacguy.next_node = process_path.next_node(pacguy.current_node,
                                                        pacguy.map,
                                                        pacguy.angle) 
@@ -43,7 +43,7 @@ if __name__ == "__main__" :
             print(pacguy.score)
             pellet.kill()
         main_gui.draw_background()
-        main_gui.map()
+        main_gui.draw_map()
         main_gui.pacman_and_pellets.draw(main_gui.screen)
         pygame.display.update()  
         clock.tick(10)

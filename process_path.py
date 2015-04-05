@@ -30,9 +30,9 @@ def next_node(current_node, graph, angle):
             node_to_node_angle = 0
         elif dx < 0:
             node_to_node_angle = 180
-        elif dy > 0:
-            node_to_node_angle = 90
         elif dy < 0:
+            node_to_node_angle = 90
+        elif dy > 0:
             node_to_node_angle = 270
         if node_to_node_angle == angle:
             return neighbour
