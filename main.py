@@ -84,6 +84,9 @@ if __name__ == "__main__" :
             ghost1.image = ghost1.image2
             ghost1.imgnum = 2
             ghost1.newimgrot()
+            ghost2.image = ghost2.image2
+            ghost2.imgnum = 2
+            ghost2.newimgrot()
         if pacguy.power == 1:
             if pacguy.power == 1 and pacguy.derp == 0:
                 clock1 = int(clock.get_rawtime())
@@ -95,6 +98,9 @@ if __name__ == "__main__" :
                 ghost1.image = ghost1.image1
                 ghost1.imgnum = 1
                 ghost1.newimgrot()
+                ghost2.image = ghost2.image1
+                ghost2.imgnum = 1
+                ghost2.newimgrot()
 
 
         main_gui.draw_background()
