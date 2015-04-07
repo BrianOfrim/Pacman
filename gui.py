@@ -1,6 +1,7 @@
 import sys, pygame
 from graph_v2 import Graph
 from pellet import Pellet
+from pellet import Power_Pellet
 from unit import pacman
 from ghost import ghost
 class GUI():
@@ -24,7 +25,9 @@ class GUI():
         self.background = background.convert()
         self.background.fill((250, 250, 250))
         self.pellet_list = pygame.sprite.Group()
+        self.ppellet_list = pygame.sprite.Group()
         self.pacman_and_pellets = pygame.sprite.Group()
+        self.pacman = pygame.sprite.Group()
         self.pellets_added = False
         self.count =0
         self.ghost_list = pygame.sprite.Group()
@@ -44,7 +47,7 @@ class GUI():
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0],
-                    [0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0],
+                    [0,0,2,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,2,0,0],
                     [0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0],
                     [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
                     [0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0],
@@ -58,7 +61,7 @@ class GUI():
                     [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
                     [0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0],
                     [0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0],
-                    [0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,0],
+                    [0,0,2,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,2,0,0],
                     [0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0],
                     [0,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,0],
                     [0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0],
@@ -82,21 +85,32 @@ class GUI():
         maparray = self.map_array()
         for y in range(0,len(maparray)):
             for x in range(0,len(maparray[y])):
-                if maparray[y][x] == 1:
-                    pellet = Pellet()
-                    pellet.rect.x = 25*x+12
-                    pellet.rect.y = 25*y+12
-                    self.pellet_list.add(pellet)
-                    self.pacman_and_pellets.add(pellet)
+                if maparray[y][x] != 0:
+                    if maparray[y][x] == 1:
+                        pellet = Pellet()
+                        pellet.rect.x = 25*x+12
+                        pellet.rect.y = 25*y+12
+                        self.pellet_list.add(pellet)
+                        self.pacman_and_pellets.add(pellet)
+
+                    elif maparray[y][x] == 2:
+                        ppellet = Power_Pellet()
+                        ppellet.rect.x = 25*x+12
+                        ppellet.rect.y = 25*y+12
+                        self.ppellet_list.add(ppellet)
+                        self.pacman_and_pellets.add(ppellet)
+                  
+                    #self.pellet_list.add(pellet)
+                    #self.pacman_and_pellets.add(pellet)
                     verticies.add((x*tile_dim, y*tile_dim))
                     #check for left neighbour
-                    if(x!=0 and maparray[y][x-1] == 1):
+                    if(x!=0 and maparray[y][x-1] != 0):
                         edges.append(((x*tile_dim, y*tile_dim),
                                       ((x-1)*tile_dim, y*tile_dim)))
                         edges.append((((x-1)*tile_dim, y*tile_dim),
                                       (x*tile_dim, y*tile_dim)))                        
                     #check for upper neighbour
-                    if(y!=0 and maparray[y-1][x] == 1):
+                    if(y!=0 and maparray[y-1][x] != 0):
                         #print(self.count)
                         #self.count += 1
                         edges.append(((x*tile_dim, y*tile_dim),
@@ -121,23 +135,24 @@ class GUI():
 
 
     def print_stuff(self, pacguy):
-        #font = pygame.font.SysFont("monospace", 15)
         font1 = pygame.font.Font("Assets/pacfont.ttf", 16)
         font2 = pygame.font.Font(None, 30)
         font3 = pygame.font.Font("Assets/pacfont.ttf", 50)
         font3.set_bold(1)
         score1 = font1.render("Score: ", 1, (247,255,0))
-        #print(pacguy.score)
         title = font3.render("PACMAN", 1, (247,255,0))
         score2 = font2.render(str(int(pacguy.score)), 1, (247,255,0))
-        if pacguy.lives == 1:
-            lives = font1.render("Lives: 1", 1, (247,255,0))
-        if pacguy.lives == 2:
-            lives = font1.render("Lives: 11", 1, (247,255,0))
-        if pacguy.lives == 3:
-            lives = font1.render("Lives: 111", 1, (247,255,0))
         self.screen.blit(title, (135,0))
         self.screen.blit(score1, (0,610))
         self.screen.blit(score2, (80,610))
+    
+    def print_lives(self, pacguy):
+        font1 = pygame.font.Font("Assets/pacfont.ttf", 16)
+        if pacguy.lives == 1:
+            lives = font1.render("Lives: 1", 1, (247,255,0))
+        elif pacguy.lives == 2:
+            lives = font1.render("Lives: 11", 1, (247,255,0))
+        elif pacguy.lives == 3:
+            lives = font1.render("Lives: 111", 1, (247,255,0))
         self.screen.blit(lives, (200,610))
 
