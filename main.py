@@ -1,7 +1,7 @@
 import sys, pygame, gui
 from gui import GUI
-screen_width = 600
-screen_height = 600
+screen_width = 575
+screen_height = 650
 import process_path
 if __name__ == "__main__" :
     pygame.init()
@@ -22,7 +22,7 @@ if __name__ == "__main__" :
     pacguy.next_node = process_path.next_node(pacguy.current_node,
                                                        pacguy.map,
                                                        pacguy.angle) 
-
+    
     while 1:
         pacguy.move()
         for event in pygame.event.get():
@@ -40,10 +40,10 @@ if __name__ == "__main__" :
                                                       False)
         for pellet in pellet_hit_list:
             pacguy.score += 100
-            print(pacguy.score)
             pellet.kill()
         main_gui.draw_background()
         main_gui.draw_map()
         main_gui.pacman_and_pellets.draw(main_gui.screen)
+        main_gui.print_stuff(pacguy)
         pygame.display.update()  
         clock.tick(10)

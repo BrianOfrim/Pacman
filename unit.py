@@ -67,8 +67,8 @@ class pacman(Sprite):
     def start(self):
         self.lives = 3
         self.score = 0
-        self.rect.y = 16*25
-        self.rect.x = 12*25
+        self.rect.y = 18*25
+        self.rect.x = 11*25
         
    
 
