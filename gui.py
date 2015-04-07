@@ -122,7 +122,8 @@ class GUI():
         #font = pygame.font.SysFont("monospace", 15)
         font1 = pygame.font.Font("Assets/pacfont.ttf", 16)
         font2 = pygame.font.Font(None, 30)
-        font3 = pygame.font.Font("Assets/pacfont.ttf", 50, True)
+        font3 = pygame.font.Font("Assets/pacfont.ttf", 50)
+        font3.set_bold(1)
         score1 = font1.render("Score: ", 1, (247,255,0))
         #print(pacguy.score)
         title = font3.render("PACMAN", 1, (247,255,0))
@@ -133,7 +134,7 @@ class GUI():
             lives = font1.render("Lives: 11", 1, (247,255,0))
         if pacguy.lives == 3:
             lives = font1.render("Lives: 111", 1, (247,255,0))
-        self.screen.blit(title, (160,0))
+        self.screen.blit(title, (135,0))
         self.screen.blit(score1, (0,610))
         self.screen.blit(score2, (80,610))
         self.screen.blit(lives, (200,610))
