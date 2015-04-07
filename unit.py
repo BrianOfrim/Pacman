@@ -18,8 +18,10 @@ class pacman(Sprite):
         
         Sprite.__init__(self)
         
+        
         #self.loc_x = loc_x
         #self.loc_y = loc_y
+        self.power = 0
         self.angle = 0
         #self.score = 0
         #self.lives = 3
@@ -28,7 +30,9 @@ class pacman(Sprite):
         self._moving = False
         self._alive = False
         self.map = None
-       
+        pygame.init()
+        pygame.mixer.init()
+        self.sound1 = pygame.mixer.Sound("Assets/pacman_chomp.wav")       
         #Default unit stats
         self.move_sound = None
 
@@ -56,8 +60,10 @@ class pacman(Sprite):
         self.image = pacman.sprite.convert()
         self.image1 = pacman.sprite.convert()
         self.image2 = pacman.sprite1.convert()
-        self.imgnum = 1
+        #self.imgnum = 1
         self.loopcount = 0
+        self.lives = 3
+        self.score = 0
         self.base_image = self.image
         self.rect = self.image.get_rect()
         self.image.set_colorkey((32,32,32))
@@ -69,13 +75,13 @@ class pacman(Sprite):
 
 
     def die(self):
-        self.lives = self.live - 1
+        self.lives -= 1
         if self.lives == 0:
-            gameover()
+            #gameover()
+            print("GGGGGGGG!!!!!")
 
     def start(self):
-        self.lives = 3
-        self.score = 0
+        self.imgnum = 1
         self.rect.y = 18*25
         self.rect.x = 11*25
         
@@ -142,7 +148,10 @@ class pacman(Sprite):
            self.move_state =='D'):
             self.next_node = potential_next_node
             self.angle = requested_angle
-            self.image = pygame.transform.rotate(self.base_image,self.angle)
+            if self.imgnum == 1:
+                self.image = pygame.transform.rotate(self.image1,self.angle)
+            elif self.imgnum == 2:
+                self.image = pygame.transform.rotate(self.image2,self.angle)
             self.move_state = 'N'
             
         #the request is to change paths while moving
@@ -179,16 +188,20 @@ class pacman(Sprite):
         if self.angle == 270:
             self.rect.y += 5
         self.loopcount +=1
-        print(self.loopcount)
-        """if self.loopcount == 25:
+        #print(self.loopcount)
+        if self.loopcount == 3:
             self.loopcount = 0
+            print(self.imgnum)
             if self.imgnum == 1:
-                self.image = self.image2
                 self.imgnum = 2
-            if self.imgnum == 2:
+                print(self.imgnum)
+                self.image = self.image2
+                self.sound1.play()
+            elif self.imgnum == 2:
+                self.imgnum = 1
                 self.image = self.image1
-                self.imgnum = 1"""
-                
+                self.newimgrot()
+                                
         #print("")
         #print("Pacman x {}".format(self.rect.x))
         #print("Pacman y {}".format(self.rect.y))

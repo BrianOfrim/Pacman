@@ -1,4 +1,5 @@
 import sys, pygame, gui
+import pdb
 from gui import GUI
 from ghost import ghost
 screen_width = 575
@@ -42,20 +43,41 @@ if __name__ == "__main__" :
                     (event.key == pygame.K_LEFT) or
                     (event.key == pygame.K_UP) or (event.key == pygame.K_DOWN)):
                     pacguy.MoveKeyDown(event.key)
+
+        main_gui.ghost_list.add(ghost1)
+
          
+
         pellet_hit_list = pygame.sprite.spritecollide(pacguy,
                                                       main_gui.pellet_list, 
                                                       False)
+        ppellet_hit_list = pygame.sprite.spritecollide(pacguy,
+                                                      main_gui.ppellet_list,
+                                                      False)
+
+        ghost_hit_list = pygame.sprite.spritecollide(pacguy,
+                                                      main_gui.ghost_list,
+                                                      False)
+              
+        for ghost in ghost_hit_list:
+            #pdb.set_trace()
+            pacguy.die()
+            pacguy.kill()
+            ghost.kill()
+            pacguy.start() 
+           
+                
+        main_gui.ghost_list.draw(main_gui.screen)
         for pellet in pellet_hit_list:
             pacguy.score += 100
             pellet.kill()
+        for ppellet in ppellet_hit_list:
+            pacguy.power = 1
+            ppellet.kill()
         main_gui.draw_background()
         main_gui.draw_map()
         main_gui.pacman_and_pellets.draw(main_gui.screen)
-
         main_gui.ghost_list.draw(main_gui.screen)
-
         main_gui.print_stuff(pacguy)
-
         pygame.display.update()  
-        clock.tick(15)
+        clock.tick(25)
