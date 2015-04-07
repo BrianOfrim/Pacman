@@ -30,6 +30,8 @@ class pacman(Sprite):
        
         #Default unit stats
         self.move_sound = None
+
+
         self.hit_sound = None
         #self.die_sound
         #self.loc_x = loc_x

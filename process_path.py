@@ -23,7 +23,7 @@ def closest_node(pacman_x,pacman_y,graph):
 def next_node(current_node, graph, angle):
     neighbours = graph.neighbours(current_node)
     for neighbour in neighbours:
-        print(neighbour)
+        #print(neighbour)
         dx = neighbour[0]-current_node[0]
         dy = neighbour[1]-current_node[1]
         if dx > 0:

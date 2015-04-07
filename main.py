@@ -1,5 +1,6 @@
 import sys, pygame, gui
 from gui import GUI
+from ghost import ghost
 screen_width = 600
 screen_height = 600
 import process_path
@@ -9,7 +10,12 @@ if __name__ == "__main__" :
     argv = sys.argv[1:]
     main_gui = GUI(screen_height, screen_width)
     pacguy = main_gui.print_pacman()
-    pacguy.map = main_gui.map()
+    ghost1 = ghost(9*25,1*25)
+    main_gui.ghost_list.add(ghost1)
+    temp_map = main_gui.map()
+    pacguy.map = temp_map
+    ghost1.map = temp_map
+
     edge_list = pacguy.map.edges()
     #for edge in edge_list:
     #    print(edge)
@@ -25,6 +31,7 @@ if __name__ == "__main__" :
 
     while 1:
         pacguy.move()
+        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -45,5 +52,6 @@ if __name__ == "__main__" :
         main_gui.draw_background()
         main_gui.draw_map()
         main_gui.pacman_and_pellets.draw(main_gui.screen)
+        main_gui.ghost_list.draw(main_gui.screen)
         pygame.display.update()  
-        clock.tick(10)
+        clock.tick(15)

@@ -2,7 +2,7 @@ import sys, pygame
 from graph_v2 import Graph
 from pellet import Pellet
 from unit import pacman
-
+from ghost import ghost
 class GUI():
     BG_COLOR = (32, 32, 32)
     
@@ -26,6 +26,7 @@ class GUI():
         self.pacman_and_pellets = pygame.sprite.Group()
         self.pellets_added = False
         self.count =0
+        self.ghost_list = pygame.sprite.Group()
     def draw_background(self):
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
@@ -92,8 +93,8 @@ class GUI():
                                       (x*tile_dim, y*tile_dim)))                        
                     #check for upper neighbour
                     if(y!=0 and maparray[y-1][x] == 1):
-                        print(self.count)
-                        self.count += 1
+                        #print(self.count)
+                        #self.count += 1
                         edges.append(((x*tile_dim, y*tile_dim),
                                       (x*tile_dim, (y-1)*tile_dim)))
                         edges.append(((x*tile_dim, (y-1)*tile_dim),
@@ -113,4 +114,5 @@ class GUI():
         pacguy.start()
         pacguy.update()
         return pacguy
+
 
