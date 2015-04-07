@@ -157,21 +157,17 @@ class ghost(Sprite):
         if(self.angle == 180):
             if (self.rect.x % 25 == 0):
                 self.current_node[0] = self.rect.x  
-                return
             else:
                 self.current_node[0] = self.rect.x + (25 - self.rect.x % 25)
-                return
             return
         if(self.angle == 90):
-            self.current_node[1] = self.rect.y + (25 - self.rect.y % 25)
+            if (self.rect.y % 25 ==0):
+                self.current_node[1] = self.rect.y
+            else :                
+                self.current_node[1] = self.rect.y + (25 - self.rect.y % 25)
             return
         if(self.angle == 270):
-            if(self.rect.y % 25 == 0):
-                self.current_node[1] = self.rect.y
-                return
-            else:
-                self.current_node[1] = self.rect.y - (self.rect.y % 25)
-                return
+             self.current_node[1] = self.rect.y - (self.rect.y % 25)
 
 
 
