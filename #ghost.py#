@@ -29,21 +29,20 @@ class ghost(Sprite):
         #print("")
         #print("ghost x {}".format(self.rect.x))
         #print("ghost y {}".format(self.rect.y))
-        #print("Ghost1 x = {}",self.rect.x )
-        #print("Ghost1 y = {}",self.rect.y )
-        #print("Current_angle {}",self.angle )
-        #print("Before find_current_node")
-        #print("CN {}", self.current_node)
+        print("Ghost1 x = {}",self.rect.x )
+        print("Ghost1 y = {}",self.rect.y )
+        print("Current_angle {}",self.angle )
+        print("Before find_current_node")
+        print("CN {}", self.current_node)
         self.find_current_node()
-        #print("After find_current_node")
-        #print("CN {}", self.current_node)
+        print("After find_current_node")
+        print("CN {}", self.current_node)
         #print("CN x {}".format(self.closest_node[0]))
         #print("CN y {}".format(self.closest_node[1]))
         path = self.least_cost_path(self.map,
                                   (self.current_node[0], self.current_node[1])
                                     ,(pacman_x,pacman_y),self.cost_distance)
         self.next_node = path[1]
-                
         dx = self.next_node[0] - self.current_node[0]
         dy = self.next_node[1] - self.current_node[1]
         if dx > 0:
@@ -63,7 +62,7 @@ class ghost(Sprite):
         if self.imgnum == 2:
             self.image = pygame.transform.rotate(self.image2,self.angle)
             
-            
+           
     def newimgrot(self):
         if self.angle == 0:
             self.image = pygame.transform.rotate(self.image,0)
