@@ -20,14 +20,14 @@ class ghost(Sprite):
 
 
     def move(self,pacman_x,pacman_y):
-        print("")
-        print("ghost x {}".format(self.rect.x))
-        print("ghost y {}".format(self.rect.y))
+        #print("")
+        #print("ghost x {}".format(self.rect.x))
+        #print("ghost y {}".format(self.rect.y))
       
         self.closest_node = process_path.closest_node(self.rect.x,
                                                       self.rect.y,self.map)
-        print("CN x {}".format(self.closest_node[0]))
-        print("CN y {}".format(self.closest_node[1]))
+        #print("CN x {}".format(self.closest_node[0]))
+        #print("CN y {}".format(self.closest_node[1]))
         path = self.least_cost_path(self.map,
                                   (self.closest_node[0], self.closest_node[1])
                                     ,(pacman_x,pacman_y),self.cost_distance)

@@ -179,14 +179,16 @@ class pacman(Sprite):
         if self.angle == 270:
             self.rect.y += 5
         self.loopcount +=1
-        """if self.imgnum == 1 and self.loopcount == 3:
-            self.image = self.image2
-            self.imgnum = 2
+        print(self.loopcount)
+        """if self.loopcount == 25:
             self.loopcount = 0
-        if self.imgnum == 2 and self.loopcount == 3:
-            self.image = self.image1
-            self.imgnum = 1
-            self.loopcount == 0"""
+            if self.imgnum == 1:
+                self.image = self.image2
+                self.imgnum = 2
+            if self.imgnum == 2:
+                self.image = self.image1
+                self.imgnum = 1"""
+                
         #print("")
         #print("Pacman x {}".format(self.rect.x))
         #print("Pacman y {}".format(self.rect.y))
