@@ -4,36 +4,46 @@ from binary_heap import BinaryHeap
 
 class ghost(Sprite):
     sprite = pygame.image.load("Assets/ghost1.png")
-    def __init__(self,x,y):
+    def __init__(self,x,y,path_graph):
         Sprite.__init__(self)
         self.angle = 0
-        self.map = None
+        self.map = path_graph
         self.image = ghost.sprite.convert()
         self.base_image = self.image
         self.rect = self.image.get_rect()
         #self.image.set_colorkey((32,32,32))
-        self.current_node = None
+
         self.next_node = None
-        self.rect.y = y
-        self.rect.x = x
+        closest_node = process_path.closest_node(x,y,path_graph)
+        self.rect.y = closest_node[1]
+        self.rect.x = closest_node[0]
+        self.current_node = [closest_node[0], closest_node[1]]
 
 
+
+        
 
     def move(self,pacman_x,pacman_y):
         #print("")
         #print("ghost x {}".format(self.rect.x))
         #print("ghost y {}".format(self.rect.y))
-      
-        self.closest_node = process_path.closest_node(self.rect.x,
-                                                      self.rect.y,self.map)
+        print("Ghost1 x = {}",self.rect.x )
+        print("Ghost1 y = {}",self.rect.y )
+        print("Current_angle {}",self.angle )
+        print("Before find_current_node")
+        print("CN {}", self.current_node)
+        self.find_current_node()
+        print("After find_current_node")
+        print("CN {}", self.current_node)
         #print("CN x {}".format(self.closest_node[0]))
         #print("CN y {}".format(self.closest_node[1]))
         path = self.least_cost_path(self.map,
-                                  (self.closest_node[0], self.closest_node[1])
+                                  (self.current_node[0], self.current_node[1])
                                     ,(pacman_x,pacman_y),self.cost_distance)
+        self.next_node = path[1]
                 
-        dx = path[1][0]-self.rect.x
-        dy = path[1][1]-self.rect.y
+        dx = self.next_node[0] - self.current_node[0]
+        dy = self.next_node[1] - self.current_node[1]
         if dx > 0:
             self.angle = 0
             self.rect.x += 5
@@ -139,8 +149,32 @@ class ghost(Sprite):
         delta_lon = end_vertex[1] - start_vertex[1]
         distance = int(math.sqrt(delta_lat**2 + delta_lon**2))
         return distance
-    
-    
+
+    def find_current_node(self):
+        if(self.angle == 0):
+            self.current_node[0] = self.rect.x - (self.rect.x % 25)
+            return
+        if(self.angle == 180):
+            if (self.rect.x % 25 == 0):
+                self.current_node[0] = self.rect.x  
+                return
+            else:
+                self.current_node[0] = self.rect.x + (25 - self.rect.x % 25)
+                return
+            return
+        if(self.angle == 90):
+            self.current_node[1] = self.rect.y + (25 - self.rect.y % 25)
+            return
+        if(self.angle == 270):
+            if(self.rect.y % 25 == 0):
+                self.current_node[1] = self.rect.y
+                return
+            else:
+                self.current_node[1] = self.rect.y - (self.rect.y % 25)
+                return
+
+
+
 
 
     

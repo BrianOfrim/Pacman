@@ -11,11 +11,11 @@ if __name__ == "__main__" :
     argv = sys.argv[1:]
     main_gui = GUI(screen_height, screen_width)
     pacguy = main_gui.print_pacman()
-    ghost1 = ghost(9*25,3*25)
-    main_gui.ghost_list.add(ghost1)
     temp_map = main_gui.map()
     pacguy.map = temp_map
-    ghost1.map = temp_map
+    ghost1 = ghost(9*25,3*25,temp_map )
+    main_gui.ghost_list.add(ghost1)
+
 
     edge_list = pacguy.map.edges()
     #for edge in edge_list:
@@ -32,7 +32,7 @@ if __name__ == "__main__" :
     
     while 1:
         pacguy.move()
-        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
+        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])  
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -42,7 +42,7 @@ if __name__ == "__main__" :
                     (event.key == pygame.K_LEFT) or
                     (event.key == pygame.K_UP) or (event.key == pygame.K_DOWN)):
                     pacguy.MoveKeyDown(event.key)
-                   
+         
         pellet_hit_list = pygame.sprite.spritecollide(pacguy,
                                                       main_gui.pellet_list, 
                                                       False)
