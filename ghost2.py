@@ -52,4 +52,4 @@ class ghost2(ghost):
         elif dy > 0:
             self.angle = 270
         
-        self.image = pygame.transform.rotate(self.base_image,self.angle)
+        self.image = pygame.transform.rotate(self.image1,self.angle)

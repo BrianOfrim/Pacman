@@ -21,6 +21,7 @@ class pacman(Sprite):
         
         #self.loc_x = loc_x
         #self.loc_y = loc_y
+        self.derp = 0
         self.power = 0
         self.angle = 0
         #self.score = 0
