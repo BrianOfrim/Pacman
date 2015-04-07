@@ -142,17 +142,16 @@ class GUI():
         score1 = font1.render("Score: ", 1, (247,255,0))
         title = font3.render("PACMAN", 1, (247,255,0))
         score2 = font2.render(str(int(pacguy.score)), 1, (247,255,0))
+        if pacguy.lives == 1:
+            life = font1.render("Lives: 1", 1, (247,255,0))
+        elif pacguy.lives == 2:
+            life = font1.render("Lives: 11", 1, (247,255,0))
+        elif pacguy.lives == 3:
+            life = font1.render("Lives: 111", 1, (247,255,0))
+        self.screen.blit(life, (200,610))
         self.screen.blit(title, (135,0))
         self.screen.blit(score1, (0,610))
         self.screen.blit(score2, (80,610))
     
-    def print_lives(self, pacguy):
-        font1 = pygame.font.Font("Assets/pacfont.ttf", 16)
-        if pacguy.lives == 1:
-            lives = font1.render("Lives: 1", 1, (247,255,0))
-        elif pacguy.lives == 2:
-            lives = font1.render("Lives: 11", 1, (247,255,0))
-        elif pacguy.lives == 3:
-            lives = font1.render("Lives: 111", 1, (247,255,0))
-        self.screen.blit(lives, (200,610))
+        
 

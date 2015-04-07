@@ -62,6 +62,8 @@ class pacman(Sprite):
         self.image2 = pacman.sprite1.convert()
         #self.imgnum = 1
         self.loopcount = 0
+        self.lives = 3
+        self.score = 0
         self.base_image = self.image
         self.rect = self.image.get_rect()
         self.image.set_colorkey((32,32,32))
@@ -73,14 +75,13 @@ class pacman(Sprite):
 
 
     def die(self):
-        self.lives = self.live - 1
+        self.lives -= 1
         if self.lives == 0:
-            gameover()
+            #gameover()
+            print("GGGGGGGG!!!!!")
 
     def start(self):
         self.imgnum = 1
-        self.lives = 3
-        self.score = 0
         self.rect.y = 18*25
         self.rect.x = 11*25
         
