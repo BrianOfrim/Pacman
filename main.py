@@ -2,7 +2,7 @@ import sys, pygame, gui
 import pdb
 from gui import GUI
 from ghost import ghost
-from ghost2 import ghost2
+from ghost2 import clyde
 screen_width = 575
 screen_height = 650
 
@@ -17,8 +17,12 @@ if __name__ == "__main__" :
     pacguy.map = temp_map
     ghost1 = ghost(9*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost1)
-    ghost2 = ghost2(15*25,3*25,temp_map )
+    ghost2 = clyde(15*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost2)
+    ghost3 = clyde(12*25,3*25,temp_map)
+    main_gui.ghost_list.add(ghost3)
+    ghost4 = ghost(14*25,3*25,temp_map)
+    main_gui.ghost_list.add(ghost4)
 
 
     edge_list = pacguy.map.edges()
@@ -38,7 +42,9 @@ if __name__ == "__main__" :
     while 1:
         pacguy.move()
         ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
+        ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
         ghost2.move()
+        ghost3.move()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -87,6 +93,12 @@ if __name__ == "__main__" :
             ghost2.image = ghost2.image2
             ghost2.imgnum = 2
             ghost2.newimgrot()
+            ghost3.image = ghost3.image2
+            ghost3.imgnum = 2
+            ghost3.newimgrot()
+            ghost4.image = ghost4.image2
+            ghost4.imgnum = 2
+            ghost4.newimgrot()
         if pacguy.power == 1:
             if pacguy.power == 1 and pacguy.derp == 0:
                 clock1 = int(clock.get_rawtime())
@@ -101,6 +113,12 @@ if __name__ == "__main__" :
                 ghost2.image = ghost2.image1
                 ghost2.imgnum = 1
                 ghost2.newimgrot()
+                ghost3.image = ghost3.image1
+                ghost3.imgnum = 1
+                ghost3.newimgrot()
+                ghost4.image = ghost4.image1
+                ghost4.imgnum = 1
+                ghost4.newimgrot()
 
 
         main_gui.draw_background()
