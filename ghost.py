@@ -11,7 +11,7 @@ class ghost(Sprite):
         self.image = ghost.sprite.convert()
         self.base_image = self.image
         self.rect = self.image.get_rect()
-        #self.image.set_colorkey((32,32,32))
+        self.image.set_colorkey((0,0,0))
 
         self.next_node = None
         closest_node = process_path.closest_node(x,y,path_graph)
@@ -27,14 +27,14 @@ class ghost(Sprite):
         #print("")
         #print("ghost x {}".format(self.rect.x))
         #print("ghost y {}".format(self.rect.y))
-        print("Ghost1 x = {}",self.rect.x )
-        print("Ghost1 y = {}",self.rect.y )
-        print("Current_angle {}",self.angle )
-        print("Before find_current_node")
-        print("CN {}", self.current_node)
+        #print("Ghost1 x = {}",self.rect.x )
+        #print("Ghost1 y = {}",self.rect.y )
+        #print("Current_angle {}",self.angle )
+        #print("Before find_current_node")
+        #print("CN {}", self.current_node)
         self.find_current_node()
-        print("After find_current_node")
-        print("CN {}", self.current_node)
+        #print("After find_current_node")
+        #print("CN {}", self.current_node)
         #print("CN x {}".format(self.closest_node[0]))
         #print("CN y {}".format(self.closest_node[1]))
         path = self.least_cost_path(self.map,

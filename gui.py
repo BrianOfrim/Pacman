@@ -5,7 +5,7 @@ from pellet import Power_Pellet
 from unit import pacman
 from ghost import ghost
 class GUI():
-    BG_COLOR = (32, 32, 32)
+    BG_COLOR = (0, 0, 0)
     
     
     def __init__(self,screen_height,screen_width,

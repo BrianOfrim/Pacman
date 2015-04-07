@@ -2,6 +2,7 @@ import sys, pygame, gui
 import pdb
 from gui import GUI
 from ghost import ghost
+from ghost2 import ghost2
 screen_width = 575
 screen_height = 650
 
@@ -16,7 +17,8 @@ if __name__ == "__main__" :
     pacguy.map = temp_map
     ghost1 = ghost(9*25,3*25,temp_map )
     main_gui.ghost_list.add(ghost1)
-
+    ghost2 = ghost2(15*25,3*25,temp_map )
+    main_gui.ghost_list.add(ghost2)
 
     edge_list = pacguy.map.edges()
     #for edge in edge_list:
@@ -29,11 +31,13 @@ if __name__ == "__main__" :
     pacguy.rect.y = pacguy.current_node[1]
     pacguy.next_node = process_path.next_node(pacguy.current_node,
                                                        pacguy.map,
-                                                       pacguy.angle) 
+                                                       pacguy.angle)
+    
     
     while 1:
         pacguy.move()
-        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])  
+        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
+        ghost2.move()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
