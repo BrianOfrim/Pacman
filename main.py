@@ -11,21 +11,30 @@ if __name__ == "__main__" :
     pygame.init()
     clock = pygame.time.Clock()
     argv = sys.argv[1:]
-    main_gui = GUI(screen_height, screen_width)
+    main_gui = GUI(screen_height, screen_width) 
     pacguy = main_gui.print_pacman()
     temp_map = main_gui.map()
+    #tuple containing the ghost map and starting locations
+    ghost_tuple = main_gui.ghost_map()
+    ghost_map = ghost_tuple[0]
+    #list containing ghost start locations
+    ghost_start = ghost_tuple[1]
     pacguy.map = temp_map
     #ghost1 initialize
-    ghost1 = ghost(9*25,3*25,temp_map)
+    ghost1 = ghost(ghost_start[0][0],ghost_start[0][1]
+                   ,ghost_map)
     main_gui.ghost_list.add(ghost1)
     #ghost2 initialize
-    ghost2 = clyde(15*25,3*25,temp_map)
+    ghost2 = clyde(ghost_start[1][0],ghost_start[1][1]
+                   ,ghost_map)
     main_gui.ghost_list.add(ghost2)
     #ghost3 initialize
-    ghost3 = clyde(12*25,3*25,temp_map)
+    ghost3 = clyde(ghost_start[2][0],ghost_start[2][1]
+                   ,ghost_map)
     main_gui.ghost_list.add(ghost3)
     #ghost4 initialize
-    ghost4 = ghost(14*25,3*25,temp_map)
+    ghost4 = ghost(ghost_start[3][0],ghost_start[3][1]
+                   ,ghost_map)
     main_gui.ghost_list.add(ghost4)
 
     edge_list = pacguy.map.edges()

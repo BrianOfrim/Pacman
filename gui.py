@@ -73,6 +73,34 @@ class GUI():
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
         return maparray
 
+    def ghost_array(self):
+
+        ghost_array = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                       [0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0],
+                       [0,0,2,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,2,0,0],
+                       [0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0],
+                       [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                       [0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0],
+                       [0,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,0],
+                       [0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0],
+                       [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
+                       [0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0],
+                       [0,1,1,1,1,1,1,1,0,0,3,3,3,3,0,1,1,1,1,1,1,1,0],
+                       [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
+                       [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
+                       [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
+                       [0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0],
+                       [0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0],
+                       [0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,0],
+                       [0,0,0,2,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,2,0,0,0],
+                       [0,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,0],
+                       [0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0],
+                       [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+        return ghost_array
+
     def draw_map(self):
         tile_dim = 25
         maparray = self.map_array()
@@ -125,7 +153,52 @@ class GUI():
         return Graph(verticies,edges)
                            
                             
-    
+
+    def ghost_map(self): 
+        edges = list()
+        verticies = set()
+        ghost_start_locations = list()
+        tile_dim = 25
+        maparray = self.ghost_array()
+        for y in range(0,len(maparray)):
+            for x in range(0,len(maparray[y])):
+                if maparray[y][x] != 0:
+                    if maparray[y][x] == 3:
+                        ghost_start_locations.append((x*tile_dim, y*tile_dim))
+                        #pellet = Pellet()
+                        #pellet.rect.x = 25*x+12
+                        #pellet.rect.y = 25*y+12
+                        #self.pellet_list.add(pellet)
+                        #self.pacman_and_pellets.add(pellet)
+
+                    #elif maparray[y][x] == 2:
+                        #ppellet = Power_Pellet()
+                        #ppellet.rect.x = 25*x+12
+                        #ppellet.rect.y = 25*y+12
+                        #self.ppellet_list.add(ppellet)
+                        #self.pacman_and_pellets.add(ppellet)
+                  
+                    #self.pellet_list.add(pellet)
+                    #self.pacman_and_pellets.add(pellet)
+                    verticies.add((x*tile_dim, y*tile_dim))
+                    #check for left neighbour
+                    if(x!=0 and maparray[y][x-1] != 0):
+                        edges.append(((x*tile_dim, y*tile_dim),
+                                      ((x-1)*tile_dim, y*tile_dim)))
+                        edges.append((((x-1)*tile_dim, y*tile_dim),
+                                      (x*tile_dim, y*tile_dim)))                        
+                    #check for upper neighbour
+                    if(y!=0 and maparray[y-1][x] != 0):
+                        #print(self.count)
+                        #self.count += 1
+                        edges.append(((x*tile_dim, y*tile_dim),
+                                      (x*tile_dim, (y-1)*tile_dim)))
+                        edges.append(((x*tile_dim, (y-1)*tile_dim),
+                                      (x*tile_dim, y*tile_dim)))
+                        
+        return Graph(verticies,edges) , ghost_start_locations
+
+   
                 
     def print_pacman(self):
         pacguy = pacman()
