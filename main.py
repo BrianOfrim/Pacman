@@ -5,7 +5,7 @@ from ghost import ghost
 from ghost2 import clyde
 screen_width = 575
 screen_height = 650
-
+game_modes = ("normal", "ghosts_scared", "reset")
 import process_path
 if __name__ == "__main__" :
     pygame.init()
@@ -15,15 +15,18 @@ if __name__ == "__main__" :
     pacguy = main_gui.print_pacman()
     temp_map = main_gui.map()
     pacguy.map = temp_map
+    #ghost1 initialize
     ghost1 = ghost(9*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost1)
+    #ghost2 initialize
     ghost2 = clyde(15*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost2)
+    #ghost3 initialize
     ghost3 = clyde(12*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost3)
+    #ghost4 initialize
     ghost4 = ghost(14*25,3*25,temp_map)
     main_gui.ghost_list.add(ghost4)
-
 
     edge_list = pacguy.map.edges()
     #for edge in edge_list:
@@ -40,11 +43,17 @@ if __name__ == "__main__" :
     
     
     while 1:
-        pacguy.move()
-        ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
-        ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
-        ghost2.move()
-        ghost3.move()
+        program_runtime = pygame.time.get_ticks()
+        if(pacguy.alive()):
+            pacguy.move()
+        if(ghost1.alive()):
+            ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
+        if(ghost4.alive()):
+            ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
+        if(ghost2.alive()):
+            ghost2.move()
+        if(ghost3.alive()):
+            ghost3.move()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -84,27 +93,31 @@ if __name__ == "__main__" :
 
         for ppellet in ppellet_hit_list:
             if pacguy.power == 1:
-                clock1 = int(clock.get_rawtime())
+                clock1 = int(pygame.time.get_ticks())
             pacguy.power = 1
             ppellet.kill()
             ghost1.image = ghost1.image2
+            ghost1.image.set_colorkey((255,255,255))
             ghost1.imgnum = 2
             ghost1.newimgrot()
             ghost2.image = ghost2.image2
+            ghost2.image.set_colorkey((255,255,255))
             ghost2.imgnum = 2
             ghost2.newimgrot()
             ghost3.image = ghost3.image2
+            ghost3.image.set_colorkey((255,255,255))
             ghost3.imgnum = 2
             ghost3.newimgrot()
             ghost4.image = ghost4.image2
+            ghost4.image.set_colorkey((255,255,255))
             ghost4.imgnum = 2
             ghost4.newimgrot()
         if pacguy.power == 1:
             if pacguy.power == 1 and pacguy.derp == 0:
-                clock1 = int(clock.get_rawtime())
+                clock1 = int(pygame.time.get_ticks())
                 pacguy.derp +=1
             print(clock1)
-            if int(clock.get_rawtime()) >= (clock1 + 60):
+            if program_runtime >= (clock1 + 10000):
                 pacguy.power = 0
                 pacguy.derp = 0
                 ghost1.image = ghost1.image1

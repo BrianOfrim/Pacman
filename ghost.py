@@ -1,7 +1,7 @@
 import pygame, gui, process_path, math,pdb
 from pygame.sprite import Sprite
 from binary_heap import BinaryHeap
-
+import random
 class ghost(Sprite):
     sprite = pygame.image.load("Assets/ghost1.png")
     sprite1 = pygame.image.load("Assets/ghost_scared.png")
@@ -12,7 +12,6 @@ class ghost(Sprite):
         self.image1 = ghost.sprite.convert()
         self.image = self.image1
         self.rect = self.image.get_rect()
-        self.image.set_colorkey((0,0,0))
 
         self.image2 = ghost.sprite1.convert()
         self.next_node = None
@@ -27,7 +26,14 @@ class ghost(Sprite):
         
 
     def move(self,pacman_x,pacman_y):
-        #print("")
+        if self.imgnum == 1:
+            self.move_closest_path(pacman_x, pacman_y)
+        else:
+            self.move_random()
+            
+
+    def move_closest_path(self,pacman_x,pacman_y):
+                #print("")
         #print("ghost x {}".format(self.rect.x))
         #print("ghost y {}".format(self.rect.y))
         #print("Ghost1 x = {}",self.rect.x )
@@ -59,10 +65,71 @@ class ghost(Sprite):
         elif dy > 0:
             self.angle = 270
             self.rect.y += 5
-        if self.imgnum == 1:
-            self.image = pygame.transform.rotate(self.image1,self.angle)
-        if self.imgnum == 2:
-            self.image = pygame.transform.rotate(self.image2,self.angle)
+        if(self.angle != 180):
+            if self.imgnum == 1:
+                self.image = pygame.transform.rotate(self.image1,self.angle)
+            if self.imgnum == 2:
+                self.image = pygame.transform.rotate(self.image2,self.angle)
+        else:
+            if self.imgnum == 1:
+                self.image = pygame.transform.flip(self.image1,True,False)
+            if self.imgnum == 2:
+                self.image = pygame.transform.flip(self.image2,True,False)
+
+    def move_random(self):
+        if self.angle == 0:
+            self.rect.x += 5
+        if self.angle == 90:
+            self.rect.y -= 5
+        if self.angle == 180:
+            self.rect.x -= 5
+        if self.angle == 270:
+            self.rect.y += 5
+        if((self.rect.x == self.next_node[0]) and
+           (self.rect.y == self.next_node[1])):
+            self.current_node = self.next_node
+            num_neighbours = process_path.num_neighbours((
+                    self.current_node[0],self.current_node[1]),
+                                                         self.map,self.angle)
+            if num_neighbours > 2:
+                self.random_choice()
+                return
+            next_node = process_path.next_node((
+                    self.current_node[0],self.current_node[1]),
+                                                    self.map,self.angle)     
+            if(next_node == None):
+                self.next_node = None
+                self.random_choice() 
+                return
+            self.next_node = [next_node[0], next_node[1]]
+
+           
+               
+    def random_choice(self):
+        neighbours = self.map.neighbours((self.current_node[0]
+                                          ,self.current_node[1]))
+        next_node = random.choice(neighbours)
+        self.next_node = [next_node[0], next_node[1]]
+        dx = self.next_node[0]-self.current_node[0]
+        dy = self.next_node[1]-self.current_node[1]
+        if dx > 0:
+            self.angle = 0
+        elif dx < 0:
+            self.angle = 180
+        elif dy < 0:
+            self.angle = 90
+        elif dy > 0:
+            self.angle = 270
+        if(self.angle != 180):
+            if self.imgnum == 1:
+                self.image = pygame.transform.rotate(self.image1,self.angle)
+            if self.imgnum == 2:
+                self.image = pygame.transform.rotate(self.image2,self.angle)
+        else:
+            if self.imgnum == 1:
+                self.image = pygame.transform.flip(self.image1,True,False)
+            if self.imgnum == 2:
+                self.image = pygame.transform.flip(self.image2,True,False)
             
             
     def newimgrot(self):
