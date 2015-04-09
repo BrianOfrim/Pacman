@@ -51,6 +51,8 @@ class ghost(Sprite):
             current_node = process_path.closest_node(self.rect.x,
                                                      self.rect.y,self.map)
             self.current_node = [current_node[0], current_node[1]]
+            self.rect.x = self.current_node[0]
+            self.rect.y = self.current_node[1]
             next_node = process_path.next_node((
                     self.current_node[0],self.current_node[1]),
                                                     self.map,self.angle)     
