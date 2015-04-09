@@ -79,26 +79,46 @@ if __name__ == "__main__" :
         if(ghost1.alive()):
             ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
         else:
-            ghost1.respawn()
-            main_gui.ghost_list.add(ghost1)
+            if ghost1.derp == 0:
+                clock2 = int(pygame.time.get_ticks())
+                ghost1.derp = 1
+            if program_runtime >= (clock1 + 10000):
+                ghost1.respawn()
+                main_gui.ghost_list.add(ghost1)
+                ghost1.derp = 0
 
         if(ghost4.alive()):
             ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
         else:
-            ghost4.respawn()
-            main_gui.ghost_list.add(ghost4)
+            if ghost1.derp == 0:
+                clock3 = int(pygame.time.get_ticks())
+                ghost4.derp = 1
+            if program_runtime >= (clock3 + 2500):
+                ghost4.respawn()
+                main_gui.ghost_list.add(ghost4)
+                ghost4.derp = 0
 
         if(ghost2.alive()):
             ghost2.move()
         else:
-            ghost2.respawn()
-            main_gui.ghost_list.add(ghost2)
+            if ghost2.derp == 0:
+                clock4 = int(pygame.time.get_ticks())
+                ghost2.derp = 1
+            if program_runtime >= (clock4 + 2500):
+                ghost2.respawn()
+                main_gui.ghost_list.add(ghost2)
+                ghost2.derp = 0
 
         if(ghost3.alive()):
             ghost3.move()
         else:
-            ghost3.respawn()
-            main_gui.ghost_list.add(ghost3)
+            if ghost3.derp == 0:
+                clock5 = int(pygame.time.get_ticks())
+                ghost3.derp = 1
+            if program_runtime >= (clock2 + 2500):
+                ghost3.respawn()
+                main_gui.ghost_list.add(ghost3)
+                ghost3.derp = 1
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
