@@ -16,11 +16,14 @@ class ghost(Sprite):
         self.image2 = ghost.sprite1.convert()
         self.next_node = None
         self.imgnum = 1
-        closest_node = process_path.closest_node(x,y,path_graph)
-        self.rect.y = closest_node[1]
-        self.rect.x = closest_node[0]
-        self.current_node = [closest_node[0], closest_node[1]]
-
+        #closest_node = process_path.closest_node(x,y,path_graph)
+        self.rect.x = x
+        self.rect.y = y
+ 
+        self.current_node = [x, y]
+        self.start_x = x
+        self.start_y = y
+        
 
 
         
@@ -41,6 +44,7 @@ class ghost(Sprite):
         #print("Current_angle {}",self.angle )
         #print("Before find_current_node")
         #print("CN {}", self.current_node)
+        #self.valid_node_check()
         self.find_current_node()
         #print("After find_current_node")
         #print("CN {}", self.current_node)
@@ -109,6 +113,8 @@ class ghost(Sprite):
         neighbours = self.map.neighbours((self.current_node[0]
                                           ,self.current_node[1]))
         next_node = random.choice(neighbours)
+        if(next_node == None):
+            print("No next node in the random state")
         self.next_node = [next_node[0], next_node[1]]
         dx = self.next_node[0]-self.current_node[0]
         dy = self.next_node[1]-self.current_node[1]
@@ -138,7 +144,7 @@ class ghost(Sprite):
         if self.angle == 90:
             self.image = pygame.transform.rotate(self.image,90)
         if self.angle == 180:
-            self.image = pygame.transform.rotate(self.image,180)
+            self.image = pygame.transform.flip(self.image,True,False)
         if self.angle == 270:
             self.image = pygame.transform.rotate(self.image,270)
 
@@ -251,7 +257,16 @@ class ghost(Sprite):
              self.current_node[1] = self.rect.y - (self.rect.y % 25)
 
 
-
-
+    def respawn(self):
+        self.imgnum = 1
+        self.angle = 0     
+        #closest_node = process_path.closest_node(self.rect.x,self.rect.y
+        #                                         ,self.map)
+ 
+        self.current_node = [self.start_x, self.start_y]
+        self.rect.x = self.start_x
+        self.rect.y = self.start_y
+        self.next_node = None
 
     
+        #def valid_node_check(self);

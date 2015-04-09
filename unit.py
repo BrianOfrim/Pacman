@@ -11,10 +11,9 @@ class pacman(Sprite):
     sprite = pygame.image.load("Assets/pacman.png")
     sprite1 = pygame.image.load("Assets/circle.png")
     def __init__(self,
-                 loc_x = None,
-                 loc_y = None,
-                 activate = False,
-                 **keywords):
+                 loc_x ,
+                 loc_y ,
+                 path_graph):
         
         Sprite.__init__(self)
         
@@ -30,9 +29,8 @@ class pacman(Sprite):
         #assign later
         self._moving = False
         self._alive = False
-        self.map = None
-        pygame.init()
-        pygame.mixer.init()
+        self.map = path_graph
+        #pygame.init()
         self.sound1 = pygame.mixer.Sound("Assets/pacman_chomp.wav")       
         #Default unit stats
         self.move_sound = None
@@ -57,7 +55,7 @@ class pacman(Sprite):
         #self.move_sound = None
         #self.hit_sound = None
         #self.die_sound
-        
+        self.imgnum = 1       
         self.image = pacman.sprite.convert()
         self.image1 = pacman.sprite.convert()
         self.image2 = pacman.sprite1.convert()
@@ -67,24 +65,31 @@ class pacman(Sprite):
         self.score = 0
         self.base_image = self.image
         self.rect = self.image.get_rect()
+ 
+
         self.image.set_colorkey((32,32,32))
         self.image1.set_colorkey((32,32,32))
         self.image2.set_colorkey((32,32,32))
         #def move(self):
-        self.current_node = None
-        self.next_node = None
+
+        self.current_node = process_path.closest_node(loc_x,loc_y,self.map)
+        #sync graph with Pacman
+        self.rect.x = self.current_node[0]
+        self.rect.y = self.current_node[1]
+        self.next_node = process_path.next_node(self.current_node,self.map,
+                                                self.angle)
+        self.start_x = self.rect.x
+        self.start_y = self.rect.y
+
 
 
     def die(self):
         self.lives -= 1
         if self.lives == 0:
             #gameover()
-            print("GGGGGGGG!!!!!")
+            print("Gameover!")
 
-    def start(self):
-        self.imgnum = 1
-        self.rect.y = 18*25
-        self.rect.x = 11*25
+
         
    
     def newimgrot(self):
@@ -192,10 +197,10 @@ class pacman(Sprite):
         #print(self.loopcount)
         if self.loopcount == 3:
             self.loopcount = 0
-            print(self.imgnum)
+            #print(self.imgnum)
             if self.imgnum == 1:
                 self.imgnum = 2
-                print(self.imgnum)
+                #print(self.imgnum)
                 self.image = self.image2
                 self.sound1.play()
             elif self.imgnum == 2:
@@ -238,7 +243,15 @@ class pacman(Sprite):
         
         
             
-            
+    def respawn(self):
+        self.angle = 0
+        self.move_state = "N"       
+        
+        self.current_node = process_path.closest_node(self.start_x,
+                                                      self.start_y,self.map)
+        #sync graph with Pacman
+        self.rect.x = self.current_node[0]
+        self.rect.y = self.current_node[1]
+        self.next_node = process_path.next_node(self.current_node,self.map,
+                                                self.angle)
 
-     #def pickup(self):
-              

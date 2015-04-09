@@ -3,17 +3,26 @@ import pdb
 from gui import GUI
 from ghost import ghost
 from ghost2 import clyde
+from unit import pacman
 screen_width = 575
 screen_height = 650
 game_modes = ("normal", "ghosts_scared", "reset")
 import process_path
 if __name__ == "__main__" :
     pygame.init()
+    pygame.mixer.init()
     clock = pygame.time.Clock()
     argv = sys.argv[1:]
     main_gui = GUI(screen_height, screen_width) 
-    pacguy = main_gui.print_pacman()
+    #rect = pacman.get_rect()
+    #self.screen.blit(pacman,[50,50])
+    #pygame.display.update((50,50,25,25))
+
+
+
     temp_map = main_gui.map()
+    pacguy = pacman(11*25 ,18*25,temp_map)
+    main_gui.pacman_and_pellets.add(pacguy)
     #tuple containing the ghost map and starting locations
     ghost_tuple = main_gui.ghost_map()
     ghost_map = ghost_tuple[0]
@@ -41,28 +50,45 @@ if __name__ == "__main__" :
     #for edge in edge_list:
     #    print(edge)
     
-    pacguy.current_node = process_path.closest_node(pacguy.rect.x,
-                                                    pacguy.rect.y,pacguy.map)
-    # sync graph with Pacman
-    pacguy.rect.x = pacguy.current_node[0]
-    pacguy.rect.y = pacguy.current_node[1]
-    pacguy.next_node = process_path.next_node(pacguy.current_node,
-                                                       pacguy.map,
-                                                       pacguy.angle)
     
     
     while 1:
         program_runtime = pygame.time.get_ticks()
         if(pacguy.alive()):
             pacguy.move()
+        else:
+            pacguy.respawn()
+            ghost1.respawn()
+            ghost2.respawn()
+            ghost3.respawn()
+            ghost4.respawn()
+            main_gui.pacman_and_pellets.add(pacguy)
+            pygame.time.delay(1000)
+
         if(ghost1.alive()):
             ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
+        else:
+            ghost1.respawn()
+            main_gui.ghost_list.add(ghost1)
+
         if(ghost4.alive()):
             ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
+        else:
+            ghost4.respawn()
+            main_gui.ghost_list.add(ghost4)
+
         if(ghost2.alive()):
             ghost2.move()
+        else:
+            ghost2.respawn()
+            main_gui.ghost_list.add(ghost2)
+
         if(ghost3.alive()):
             ghost3.move()
+        else:
+            ghost3.respawn()
+            main_gui.ghost_list.add(ghost3)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
@@ -85,12 +111,12 @@ if __name__ == "__main__" :
                                                       False)
         for ghost in ghost_hit_list:
             #pdb.set_trace()
-            if pacguy.power == 0:
+            if ghost.imgnum == 1:
                 pacguy.die()
-                ghost.kill()
+                #ghost.kill()
                 pacguy.kill()
-                pacguy.start() 
-            elif pacguy.power == 1:
+                #pacguy.start() 
+            elif ghost.imgnum == 2:
                 ghost.kill()
                 pacguy.score += 500
                 #ghost1 = ghost(9*25,3*25,temp_map)      
@@ -125,7 +151,7 @@ if __name__ == "__main__" :
             if pacguy.power == 1 and pacguy.derp == 0:
                 clock1 = int(pygame.time.get_ticks())
                 pacguy.derp +=1
-            print(clock1)
+            #print(clock1)
             if program_runtime >= (clock1 + 10000):
                 pacguy.power = 0
                 pacguy.derp = 0
