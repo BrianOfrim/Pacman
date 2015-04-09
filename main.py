@@ -82,7 +82,7 @@ if __name__ == "__main__" :
             if ghost1.derp == 0:
                 clock2 = int(pygame.time.get_ticks())
                 ghost1.derp = 1
-            if program_runtime >= (clock1 + 10000):
+            if program_runtime >= (clock2 + 10000):
                 ghost1.respawn()
                 main_gui.ghost_list.add(ghost1)
                 ghost1.derp = 0
@@ -115,7 +115,7 @@ if __name__ == "__main__" :
             if ghost3.derp == 0:
                 clock5 = int(pygame.time.get_ticks())
                 ghost3.derp = 1
-            if program_runtime >= (clock2 + 2500):
+            if program_runtime >= (clock5 + 2500):
                 ghost3.respawn()
                 main_gui.ghost_list.add(ghost3)
                 ghost3.derp = 1
