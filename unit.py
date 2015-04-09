@@ -1,4 +1,4 @@
-import pygame, gui, process_path, math
+import pygame, gui, process_path, math, pdb
 from pygame.sprite import Sprite
 
 
@@ -125,12 +125,92 @@ class pacman(Sprite):
             requested_angle = 180
         if (key == pygame.K_DOWN):
             requested_angle = 270
-        
+
+        potential_next_node = process_path.next_node(self.current_node,
+                                                     self.map, requested_angle)
+
+        if(potential_next_node == None):
+            #print("Potential next node = none")
+            if self.move_state == 'D':
+                #self.next_node = potential_next_node
+                return
+            potential_next_next_node = process_path.next_node(self.next_node,
+                                                     self.map, requested_angle)
+            if(potential_next_next_node == None):
+                #self.next_node = potential_next_next_node
+                return 
+            #pdb.set_trace()
+            if((abs(self.angle - requested_angle) == 90)
+               or (self.angle == 0 and requested_angle == 270)
+               or (self.angle == 270 and requested_angle == 0)) :
+                if((abs(self.rect.x - self.next_node[0]) <= 5) and
+                   (abs(self.rect.y - self.next_node[1]) <= 5)):
+                    self.current_node = self.next_node
+                    self.next_node = potential_next_next_node
+                    self.angle = requested_angle
+                    self.image = pygame.transform.rotate(self.base_image,
+                                                         self.angle)
+                    self.move_state = 'N'
+                    self.rect.x = self.current_node[0]
+                    self.rect.y = self.current_node[1]
+                    return
+                return
+
+        if((requested_angle ==(self.angle + 180) % 360) or 
+           self.move_state =='D'):
+            self.next_node = potential_next_node
+            self.angle = requested_angle
+            if self.imgnum == 1:
+                self.image = pygame.transform.rotate(self.image1,self.angle)
+            elif self.imgnum == 2:
+                self.image = pygame.transform.rotate(self.image2,self.angle)
+            self.move_state = 'N'
+            return
+
+
+
+        if((abs(self.angle - requested_angle) == 90)
+           or (self.angle == 0 and requested_angle == 270)
+           or (self.angle == 270 and requested_angle == 0)):
+            if((abs(self.rect.x - self.current_node[0]) <= 5) and
+               (abs(self.rect.y - self.current_node[1]) <= 5)):
+                
+                self.next_node = potential_next_node
+                self.angle = requested_angle
+                self.image = pygame.transform.rotate(self.base_image,self.angle)
+                self.move_state = 'N'
+                self.rect.x = self.current_node[0]
+                self.rect.y = self.current_node[1]
+                return
+
+        potential_next_next_node = process_path.next_node(self.next_node,
+                                                     self.map, requested_angle)
+        if(potential_next_next_node == None):
+                #self.next_node = potential_next_next_node
+            return 
+            #pdb.set_trace()
+        if((abs(self.angle - requested_angle) == 90)
+              or (self.angle == 0 and requested_angle == 270)
+              or (self.angle == 270 and requested_angle == 0)) :
+               if((abs(self.rect.x - self.next_node[0]) <= 5) and
+                  (abs(self.rect.y - self.next_node[1]) <= 5)):
+                   self.current_node = self.next_node
+                   self.next_node = potential_next_next_node
+                   self.angle = requested_angle
+                   self.image = pygame.transform.rotate(self.base_image,
+                                                        self.angle)
+                   self.move_state = 'N'
+                   self.rect.x = self.current_node[0]
+                   self.rect.y = self.current_node[1]
+                   return
+ 
+
+
         #check if directions are opposite
-        if(requested_angle == ((self.angle + 180) % 360) 
-           or self.move_state =='D'):
+        #if(requested_angle == ((self.angle + 180) % 360) 
+        #   or self.move_state =='D'):
            #and (self.move_state == "N")):
-            self.check_decision(requested_angle)
+            #self.check_decision(requested_angle)
         
                #self.angle = requested_angle
                #self.image = pygame.transform.rotate(self.base_image,self.angle)
@@ -169,8 +249,8 @@ class pacman(Sprite):
         #        self.next_node = potential_next_node
         #        self.angle = requested_angle
         #        self.image = pygame.transform.rotate(self.base_image,self.angle)
-        #        self.move_state = 'N'
-        #        self.rect.x = self.current_node[0]
+         #       self.move_state = 'N'
+         #       self.rect.x = self.current_node[0]
         #        self.rect.y = self.current_node[1]
             
         
@@ -221,9 +301,9 @@ class pacman(Sprite):
                num_neighbours = process_path.num_neighbours(self.current_node,
                                                             self.map,
                                                             self.angle)
-               if num_neighbours > 2:
-                   self.move_state = 'D'
-                   return
+               #if num_neighbours > 2:
+               #    self.move_state = 'D'
+               #    return
                self.next_node = process_path.next_node(self.current_node,
                                                        self.map,
                                                        self.angle)

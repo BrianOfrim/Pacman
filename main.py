@@ -93,7 +93,7 @@ if __name__ == "__main__" :
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            elif event.type  == pygame.KEYDOWN:
                 if ((event.key == pygame.K_RIGHT) or 
                     (event.key == pygame.K_LEFT) or
                     (event.key == pygame.K_UP) or (event.key == pygame.K_DOWN)):

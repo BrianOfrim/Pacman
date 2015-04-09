@@ -29,6 +29,15 @@ class ghost(Sprite):
         
 
     def move(self,pacman_x,pacman_y):
+        #check if the ghost is on the path, correct if nessarary
+        if(self.angle == 180 or self.angle == 0):
+            if(self.rect.y != self.current_node[1]):
+                self.rect.y = self.current_node[1]
+
+        if(self.angle == 270 or self.angle == 90):
+            if(self.rect.x != self.current_node[0]):
+                self.rect.x = self.current_node[0]
+
         if self.imgnum == 1:
             self.move_closest_path(pacman_x, pacman_y)
         else:
