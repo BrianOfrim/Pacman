@@ -92,7 +92,7 @@ if __name__ == "__main__" :
             if ghost1.derp == 0:
                 clock2 = pygame.time.get_ticks()
                 ghost1.derp = 1
-            if program_runtime >= (clock2 + 9999999):
+            if program_runtime >= (clock2 + 2500):
                 ghost1.respawn()
                 main_gui.ghost_list.add(ghost1)
                 ghost1.derp = 0
@@ -167,7 +167,7 @@ if __name__ == "__main__" :
         for pellet in pellet_hit_list:
             pacguy.score += 100
             pellet.kill()
-            print(main_gui.pellet_list.sprites)
+            #print(main_gui.pellet_list.sprites)
             if main_gui.pellet_list.sprites == 0:
                 main_gui.win()
 

@@ -24,6 +24,7 @@ class ghost(Sprite):
         self.start_x = x
         self.start_y = y
         self.derp = 0
+        self.prev_num = self.imgnum
         
 
 
@@ -44,6 +45,22 @@ class ghost(Sprite):
             self.respawn()
         if((self.rect.y < 0) or (self.rect.y > 600 )):
             self.respawn()
+        #bug fix to stop ghosts from leaving screen
+        if((self.prev_num == 1) and (self.imgnum == 2)):
+            print("ghost scared")
+            current_node = process_path.closest_node(self.rect.x,
+                                                     self.rect.y,self.map)
+            self.current_node = [current_node[0], current_node[1]]
+            next_node = process_path.next_node((
+                    self.current_node[0],self.current_node[1]),
+                                                    self.map,self.angle)     
+            if(next_node == None):
+                self.next_node = None
+                self.random_choice() 
+            else:
+                self.next_node = [next_node[0], next_node[1]]
+        self.prev_num = self.imgnum
+
         if self.imgnum == 1:
             self.move_closest_path(pacman_x, pacman_y)
         else:
