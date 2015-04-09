@@ -85,9 +85,6 @@ class pacman(Sprite):
 
     def die(self):
         self.lives -= 1
-        if self.lives == 0:
-            #gameover()
-            print("Gameover!")
 
 
         

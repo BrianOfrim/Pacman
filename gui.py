@@ -13,10 +13,11 @@ class GUI():
 
 
         #Initialize screen
+        self.start = 0
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode((screen_width,screen_height))
-        self.caption = pygame.display.set_caption("Pacman")        
+        #self.caption = pygame.display.set_caption("Pacman")        
         #Initialize score
         
         self.draw_rect(self.screen,score_color,score_rect)
@@ -38,6 +39,36 @@ class GUI():
     def draw_background(self):
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
+    def draw_titlecard(self):
+        self.draw_rect(self.screen,GUI.BG_COLOR,
+                       (0,0,self.screen_width,self.screen_height))
+        #pygame.draw.rect(self.screen,(255,0,0),
+        #               (0,0,self.screen_width,self.screen_height))
+        background1 = pygame.Surface(self.screen.get_size())
+        self.background1 = background1.convert()
+        self.background1.fill((250, 250, 250))
+        font = pygame.font.Font("Assets/pacfont.ttf", 100)
+        font1 = pygame.font.Font("Assets/pacfont.ttf", 20)
+        title = font.render("PACMAN", 1, (247,255,0))
+        prompt = font1.render("Press Enter to Start Playing", 1, (247,255,0))
+        self.screen.blit(title, (10,0))
+        self.screen.blit(prompt, (50,300))
+    
+    def gameover(self):
+        self.draw_rect(self.screen,GUI.BG_COLOR,
+                       (0,0,self.screen_width,self.screen_height))
+        #pygame.draw.rect(self.screen,(255,0,0),
+        #               (0,0,self.screen_width,self.screen_height))
+        background2 = pygame.Surface(self.screen.get_size())
+        self.background2 = background2.convert()
+        self.background2.fill((250, 250, 250))
+        font = pygame.font.Font("Assets/pacfont.ttf", 80)
+        font1 = pygame.font.Font("Assets/pacfont.ttf", 20)
+        yousuck = font.render("You Lose", 1, (247,255,0))
+        prompt = font1.render("Press Q to Quit", 1, (247,255,0))
+        self.screen.blit(yousuck, (0,100))
+        self.screen.blit(prompt, (70,300))
+        
 
     def draw_rect(self,screen,color,rect):
         return pygame.draw.rect(screen,color,rect)
@@ -59,7 +90,7 @@ class GUI():
                     [0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0],
                     [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
                     [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
-                    [0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],
+                    [0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0],
                     [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
                     [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
                     [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
@@ -87,7 +118,7 @@ class GUI():
                        [0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0],
                        [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
                        [0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0],
-                       [0,1,1,1,1,1,1,1,0,0,3,3,3,3,0,1,1,1,1,1,1,1,0],
+                       [0,0,0,0,0,1,1,1,0,0,3,3,3,3,0,1,1,1,0,0,0,0,0],
                        [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
                        [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0],
                        [0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
@@ -225,7 +256,10 @@ class GUI():
             life = font1.render("Lives: 11", 1, (247,255,0))
         elif pacguy.lives == 3:
             life = font1.render("Lives: 111", 1, (247,255,0))
-        self.screen.blit(life, (200,610))
+        if pacguy.lives != 0:
+            self.screen.blit(life, (200,610))
+        elif pacguy.lives == 0:
+            self.gameover()
         self.screen.blit(title, (135,0))
         self.screen.blit(score1, (0,610))
         self.screen.blit(score2, (80,610))

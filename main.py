@@ -18,6 +18,18 @@ if __name__ == "__main__" :
     #self.screen.blit(pacman,[50,50])
     #pygame.display.update((50,50,25,25))
 
+    while main_gui.start == 0:
+        main_gui.draw_titlecard()
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.display.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    main_gui.start = 1
+        
+    
 
 
     temp_map = main_gui.map()
@@ -49,7 +61,6 @@ if __name__ == "__main__" :
     edge_list = pacguy.map.edges()
     #for edge in edge_list:
     #    print(edge)
-    
     
     
     while 1:
@@ -112,7 +123,8 @@ if __name__ == "__main__" :
         for ghost in ghost_hit_list:
             #pdb.set_trace()
             if ghost.imgnum == 1:
-                pacguy.die()
+                if pacguy.lives != 0:
+                    pacguy.die()
                 #ghost.kill()
                 pacguy.kill()
                 #pacguy.start() 
@@ -176,3 +188,12 @@ if __name__ == "__main__" :
         main_gui.print_stuff(pacguy)
         pygame.display.update()  
         clock.tick(25)
+        if pacguy.lives == 0:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.display.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        sys.exit()
+            
