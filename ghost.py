@@ -38,6 +38,11 @@ class ghost(Sprite):
             if(self.rect.x != self.current_node[0]):
                 self.rect.x = self.current_node[0]
 
+        #check if ghost left the screen because somtimes they do
+        if((self.rect.x < 0) or (self.rect.x > 575 )):
+            self.respawn()
+        if((self.rect.y < 0) or (self.rect.y > 600 )):
+            self.respawn()
         if self.imgnum == 1:
             self.move_closest_path(pacman_x, pacman_y)
         else:
