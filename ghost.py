@@ -23,6 +23,7 @@ class ghost(Sprite):
         self.current_node = [x, y]
         self.start_x = x
         self.start_y = y
+        self.derp = 0
         
 
 
