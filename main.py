@@ -8,7 +8,17 @@ screen_width = 575
 screen_height = 650
 game_modes = ("normal", "ghosts_scared", "reset")
 import process_path
+global clock1 
+global clock2 
+global clock3 
+global clock4 
+global clock5 
 if __name__ == "__main__" :
+    clock1 = 0
+    clock2 = 0
+    clock3 = 0
+    clock4 = 0
+    clock5 = 0
     pygame.init()
     pygame.mixer.init()
     clock = pygame.time.Clock()
@@ -80,9 +90,9 @@ if __name__ == "__main__" :
             ghost1.move(pacguy.current_node[0],pacguy.current_node[1])
         else:
             if ghost1.derp == 0:
-                clock2 = int(pygame.time.get_ticks())
+                clock2 = pygame.time.get_ticks()
                 ghost1.derp = 1
-            if program_runtime >= (clock2 + 10000):
+            if program_runtime >= (clock2 + 9999999):
                 ghost1.respawn()
                 main_gui.ghost_list.add(ghost1)
                 ghost1.derp = 0
@@ -91,7 +101,7 @@ if __name__ == "__main__" :
             ghost4.move(pacguy.current_node[0],pacguy.current_node[1])
         else:
             if ghost1.derp == 0:
-                clock3 = int(pygame.time.get_ticks())
+                clock3 = pygame.time.get_ticks()
                 ghost4.derp = 1
             if program_runtime >= (clock3 + 2500):
                 ghost4.respawn()
@@ -102,7 +112,7 @@ if __name__ == "__main__" :
             ghost2.move()
         else:
             if ghost2.derp == 0:
-                clock4 = int(pygame.time.get_ticks())
+                clock4 = pygame.time.get_ticks()
                 ghost2.derp = 1
             if program_runtime >= (clock4 + 2500):
                 ghost2.respawn()
@@ -113,7 +123,7 @@ if __name__ == "__main__" :
             ghost3.move()
         else:
             if ghost3.derp == 0:
-                clock5 = int(pygame.time.get_ticks())
+                clock5 = pygame.time.get_ticks()
                 ghost3.derp = 1
             if program_runtime >= (clock5 + 2500):
                 ghost3.respawn()
@@ -157,6 +167,9 @@ if __name__ == "__main__" :
         for pellet in pellet_hit_list:
             pacguy.score += 100
             pellet.kill()
+            print(main_gui.pellet_list.sprites)
+            if main_gui.pellet_list.sprites == 0:
+                main_gui.win()
 
         for ppellet in ppellet_hit_list:
             if pacguy.power == 1:
