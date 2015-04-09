@@ -32,35 +32,22 @@ class ghost(Sprite):
 
     def move(self,pacman_x,pacman_y):
         #check if the ghost is on the path, correct if nessarary
-        if(self.angle == 180 or self.angle == 0):
-            if(self.rect.y != self.current_node[1]):
-                self.rect.y = self.current_node[1]
+        #if(self.angle == 180 or self.angle == 0):
+        #    if(self.rect.y != self.current_node[1]):
+        #        self.rect.y = self.current_node[1]
 
-        if(self.angle == 270 or self.angle == 90):
-            if(self.rect.x != self.current_node[0]):
-                self.rect.x = self.current_node[0]
+        #if(self.angle == 270 or self.angle == 90):
+        #    if(self.rect.x != self.current_node[0]):
+        #        self.rect.x = self.current_node[0]
 
         #check if ghost left the screen because somtimes they do
-        if((self.rect.x < 0) or (self.rect.x > 575 )):
-            self.respawn()
-        if((self.rect.y < 0) or (self.rect.y > 600 )):
-            self.respawn()
+        #if((self.rect.x < 0) or (self.rect.x > 575 )):
+        #    self.respawn()
+        #if((self.rect.y < 0) or (self.rect.y > 600 )):
+        #    self.respawn()
         #bug fix to stop ghosts from leaving screen
         if((self.prev_num == 1) and (self.imgnum == 2)):
-            print("ghost scared")
-            current_node = process_path.closest_node(self.rect.x,
-                                                     self.rect.y,self.map)
-            self.current_node = [current_node[0], current_node[1]]
-            self.rect.x = self.current_node[0]
-            self.rect.y = self.current_node[1]
-            next_node = process_path.next_node((
-                    self.current_node[0],self.current_node[1]),
-                                                    self.map,self.angle)     
-            if(next_node == None):
-                self.next_node = None
-                self.random_choice() 
-            else:
-                self.next_node = [next_node[0], next_node[1]]
+           self.make_sure_ghost_on_path()
         self.prev_num = self.imgnum
 
         if self.imgnum == 1:
@@ -304,3 +291,20 @@ class ghost(Sprite):
 
     
         #def valid_node_check(self);
+
+    def make_sure_ghost_on_path(self):
+           
+        current_node = process_path.closest_node(self.rect.x,
+                                                     self.rect.y,self.map)
+        self.current_node = [current_node[0], current_node[1]]
+        self.rect.x = self.current_node[0]
+        self.rect.y = self.current_node[1]
+        next_node = process_path.next_node((
+                self.current_node[0],self.current_node[1]),
+                                                    self.map,self.angle)     
+        if(next_node == None):
+            self.next_node = None
+            self.random_choice() 
+        else:
+            self.next_node = [next_node[0], next_node[1]]
+  
