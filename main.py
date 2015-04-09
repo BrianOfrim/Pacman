@@ -167,8 +167,10 @@ if __name__ == "__main__" :
         for pellet in pellet_hit_list:
             pacguy.score += 100
             pellet.kill()
+
             #print(main_gui.pellet_list.sprites)
-            if main_gui.pellet_list.sprites == 0:
+            if len(main_gui.pellet_list) == 0:
+
                 main_gui.win()
 
         for ppellet in ppellet_hit_list:
