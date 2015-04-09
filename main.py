@@ -103,7 +103,7 @@ if __name__ == "__main__" :
             if ghost1.derp == 0:
                 clock3 = pygame.time.get_ticks()
                 ghost4.derp = 1
-            if program_runtime >= (clock3 + 2500):
+            if program_runtime >= (clock3 + 9999999):
                 ghost4.respawn()
                 main_gui.ghost_list.add(ghost4)
                 ghost4.derp = 0
@@ -114,7 +114,7 @@ if __name__ == "__main__" :
             if ghost2.derp == 0:
                 clock4 = pygame.time.get_ticks()
                 ghost2.derp = 1
-            if program_runtime >= (clock4 + 2500):
+            if program_runtime >= (clock4 + 9999999):
                 ghost2.respawn()
                 main_gui.ghost_list.add(ghost2)
                 ghost2.derp = 0
@@ -125,7 +125,7 @@ if __name__ == "__main__" :
             if ghost3.derp == 0:
                 clock5 = pygame.time.get_ticks()
                 ghost3.derp = 1
-            if program_runtime >= (clock5 + 2500):
+            if program_runtime >= (clock5 + 99999999):
                 ghost3.respawn()
                 main_gui.ghost_list.add(ghost3)
                 ghost3.derp = 1
@@ -168,7 +168,7 @@ if __name__ == "__main__" :
             pacguy.score += 100
             pellet.kill()
             print(main_gui.pellet_list.sprites)
-            if main_gui.pellet_list.sprites == 0:
+            if len(main_gui.pellet_list) == 0:
                 main_gui.win()
 
         for ppellet in ppellet_hit_list:

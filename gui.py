@@ -62,13 +62,29 @@ class GUI():
         background2 = pygame.Surface(self.screen.get_size())
         self.background2 = background2.convert()
         self.background2.fill((250, 250, 250))
-        font = pygame.font.Font("Assets/pacfont.ttf", 80)
-        font1 = pygame.font.Font("Assets/pacfont.ttf", 20)
-        yousuck = font.render("You Lose", 1, (247,255,0))
-        prompt = font1.render("Press Q to Quit", 1, (247,255,0))
+        font = pygame.font.Font("Assets/Chiller.ttf", 140)
+        font1 = pygame.font.Font("Assets/pacfont.ttf", 40)
+        yousuck = font.render("You Lose!", 1, (255,0,0))
+        prompt = font1.render("Press Q to Quit", 1, (247,30,0))
         self.screen.blit(yousuck, (0,100))
         self.screen.blit(prompt, (70,300))
         
+    def win(self):
+        self.draw_rect(self.screen,GUI.BG_COLOR,
+                       (0,0,self.screen_width,self.screen_height))
+        #pygame.draw.rect(self.screen,(255,0,0),
+        #               (0,0,self.screen_width,self.screen_height))
+        background3 = pygame.Surface(self.screen.get_size())
+        self.background3 = background3.convert()
+        self.background3.fill((250, 250, 250))
+        font = pygame.font.Font("Assets/pacfont.ttf", 80)
+        font1 = pygame.font.Font("Assets/pacfont.ttf", 20)
+        yousuck = font.render("You Won!!!!", 1, (247,255,0))
+        prompt = font1.render("Press Q to Quit", 1, (247,255,0))
+        message = font1.render("This is super hard, good job!!!", 1, (247,255,0))
+        self.screen.blit(yousuck, (0,100))
+        self.screen.blit(prompt, (70,300))
+        self.screen.blit(message, (50,400))
 
     def draw_rect(self,screen,color,rect):
         return pygame.draw.rect(screen,color,rect)
