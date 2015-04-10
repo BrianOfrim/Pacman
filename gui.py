@@ -5,9 +5,14 @@ from pellet import Power_Pellet
 from unit import pacman
 from ghost import ghost
 class GUI():
+    '''
+    The graphic user interface handels the drawing of the map
+    and the creation of the graph that the pacman and ghosts travel on,
+    printing the title card, gameover screen, win screen, pacman's score,
+    pacman's lives etc.
+    '''
     BG_COLOR = (0, 0, 0)
-    
-    
+
     def __init__(self,screen_height,screen_width,
                  score_rect=(0,550,600,50),score_color =(0,0,255)):
 
@@ -16,15 +21,14 @@ class GUI():
         self.start = 0
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.screen = pygame.display.set_mode((screen_width,screen_height))
-        #self.caption = pygame.display.set_caption("Pacman")        
+        self.screen = pygame.display.set_mode((screen_width,screen_height))     
         #Initialize score
-        
         self.draw_rect(self.screen,score_color,score_rect)
         #Initialize background 
         background = pygame.Surface(self.screen.get_size())
         self.background = background.convert()
         self.background.fill((250, 250, 250))
+        #various sprite lists
         self.pellet_list = pygame.sprite.Group()
         self.ppellet_list = pygame.sprite.Group()
         self.pacman_and_pellets = pygame.sprite.Group()
@@ -32,18 +36,17 @@ class GUI():
         self.pellets_added = False
         self.count =0
         self.ghost_list = pygame.sprite.Group()
-        #GUI will initialize to the normal game state
-        self.game_state = "normal"
 
 
     def draw_background(self):
+        #draw a rectangle covering the entire screen 
+        #the map will be printed on top of this rectangle
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
     def draw_titlecard(self):
+        #draws the title card that the user sees when the game is started
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
-        #pygame.draw.rect(self.screen,(255,0,0),
-        #               (0,0,self.screen_width,self.screen_height))
         background1 = pygame.Surface(self.screen.get_size())
         self.background1 = background1.convert()
         self.background1.fill((250, 250, 250))
@@ -55,10 +58,9 @@ class GUI():
         self.screen.blit(prompt, (50,300))
     
     def gameover(self):
+        #draw the gameover screen
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
-        #pygame.draw.rect(self.screen,(255,0,0),
-        #               (0,0,self.screen_width,self.screen_height))
         background2 = pygame.Surface(self.screen.get_size())
         self.background2 = background2.convert()
         self.background2.fill((250, 250, 250))
@@ -70,10 +72,9 @@ class GUI():
         self.screen.blit(prompt, (70,300))
         
     def win(self):
+        #draw the winning screen
         self.draw_rect(self.screen,GUI.BG_COLOR,
                        (0,0,self.screen_width,self.screen_height))
-        #pygame.draw.rect(self.screen,(255,0,0),
-        #               (0,0,self.screen_width,self.screen_height))
         background3 = pygame.Surface(self.screen.get_size())
         self.background3 = background3.convert()
         self.background3.fill((250, 250, 250))
@@ -87,13 +88,32 @@ class GUI():
         self.screen.blit(message, (50,400))
 
     def draw_rect(self,screen,color,rect):
+        '''
+        Draws a rectangle with the input parameters
+
+        Args: screen : A pygame screen that the rectangle is to be drawn on
+              color : The RGB value of the rectange
+              rect (tuple) : (x,y, width, height)
+
+        Returns : A rectangle
+        '''
         return pygame.draw.rect(screen,color,rect)
 
     def draw_circle(self,screen, color, pos, radius):
+        '''
+        Draws a circle with the input parameters
+
+        Args: screen : A pygame screen that the rectangle is to be drawn on
+              color : The RGB value of the rectange
+              pos (tuple) : (x,y)
+              radius (int) : radius of the circle
+
+        Returns : A circle
+        '''
         return pygame.draw.circle(screen, color, pos, radius)
 
     def map_array(self):
-
+        #returns an array representing the pacman's path graph
         maparray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -121,7 +141,7 @@ class GUI():
         return maparray
 
     def ghost_array(self):
-
+        #returns an array representing the ghost's path graph
         ghost_array = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -149,8 +169,12 @@ class GUI():
         return ghost_array
 
     def draw_map(self):
+        '''
+        Draw the game map (the walls that confine pacman/ghosts)
+        '''
         tile_dim = 25
         maparray = self.map_array()
+        #print walls
         for y in range(0,len(maparray)):
             for x in range(0,len(maparray[y])):
                 if maparray[y][x] == 0:
@@ -158,14 +182,24 @@ class GUI():
  
  
     def map(self):
+        '''
+        Creates a graph that the pacman will travel on based on the arrary
+        returned by map_array
+
+        Returns (Graph) = the graph that is created
+        '''
         edges = list()
         verticies = set()
         tile_dim = 25
         maparray = self.map_array()
+        #create graph
+        #outer loop for rows
         for y in range(0,len(maparray)):
+            #inner loop for columns
             for x in range(0,len(maparray[y])):
                 if maparray[y][x] != 0:
                     if maparray[y][x] == 1:
+                        #create pellet and add to list
                         pellet = Pellet()
                         pellet.rect.x = 25*x+12
                         pellet.rect.y = 25*y+12
@@ -173,25 +207,21 @@ class GUI():
                         self.pacman_and_pellets.add(pellet)
 
                     elif maparray[y][x] == 2:
+                        #create power pellet and add to list
                         ppellet = Power_Pellet()
                         ppellet.rect.x = 25*x+12
                         ppellet.rect.y = 25*y+12
                         self.ppellet_list.add(ppellet)
                         self.pacman_and_pellets.add(ppellet)
-                  
-                    #self.pellet_list.add(pellet)
-                    #self.pacman_and_pellets.add(pellet)
                     verticies.add((x*tile_dim, y*tile_dim))
                     #check for left neighbour
                     if(x!=0 and maparray[y][x-1] != 0):
                         edges.append(((x*tile_dim, y*tile_dim),
                                       ((x-1)*tile_dim, y*tile_dim)))
                         edges.append((((x-1)*tile_dim, y*tile_dim),
-                                      (x*tile_dim, y*tile_dim)))                        
+                                      (x*tile_dim, y*tile_dim)))                
                     #check for upper neighbour
                     if(y!=0 and maparray[y-1][x] != 0):
-                        #print(self.count)
-                        #self.count += 1
                         edges.append(((x*tile_dim, y*tile_dim),
                                       (x*tile_dim, (y-1)*tile_dim)))
                         edges.append(((x*tile_dim, (y-1)*tile_dim),
@@ -201,32 +231,28 @@ class GUI():
                            
                             
 
-    def ghost_map(self): 
+    def ghost_map(self):
+        '''
+        Creates a graph that the ghost will travel on based on the arrary
+        returned by ghost_array
+
+        Returns (Graph) = the graph that is created
+                ghost_start_locations = list of the ghost start locations
+        '''
         edges = list()
         verticies = set()
         ghost_start_locations = list()
         tile_dim = 25
         maparray = self.ghost_array()
+        #outer loop for rows
         for y in range(0,len(maparray)):
+            #inner loop for columns
             for x in range(0,len(maparray[y])):
                 if maparray[y][x] != 0:
                     if maparray[y][x] == 3:
+                        #ghost location (repesented by 3) 
+                        #added to ghost_start_locations
                         ghost_start_locations.append((x*tile_dim, y*tile_dim))
-                        #pellet = Pellet()
-                        #pellet.rect.x = 25*x+12
-                        #pellet.rect.y = 25*y+12
-                        #self.pellet_list.add(pellet)
-                        #self.pacman_and_pellets.add(pellet)
-
-                    #elif maparray[y][x] == 2:
-                        #ppellet = Power_Pellet()
-                        #ppellet.rect.x = 25*x+12
-                        #ppellet.rect.y = 25*y+12
-                        #self.ppellet_list.add(ppellet)
-                        #self.pacman_and_pellets.add(ppellet)
-                  
-                    #self.pellet_list.add(pellet)
-                    #self.pacman_and_pellets.add(pellet)
                     verticies.add((x*tile_dim, y*tile_dim))
                     #check for left neighbour
                     if(x!=0 and maparray[y][x-1] != 0):
@@ -236,8 +262,6 @@ class GUI():
                                       (x*tile_dim, y*tile_dim)))                        
                     #check for upper neighbour
                     if(y!=0 and maparray[y-1][x] != 0):
-                        #print(self.count)
-                        #self.count += 1
                         edges.append(((x*tile_dim, y*tile_dim),
                                       (x*tile_dim, (y-1)*tile_dim)))
                         edges.append(((x*tile_dim, (y-1)*tile_dim),
@@ -246,19 +270,14 @@ class GUI():
         return Graph(verticies,edges) , ghost_start_locations
 
    
-                
-    def print_pacman(self):
-        pacguy = pacman()
-        #rect = pacman.get_rect()
-        #self.screen.blit(pacman,[50,50])
-        #pygame.display.update((50,50,25,25))
-        self.pacman_and_pellets.add(pacguy)
-        pacguy.start()
-        pacguy.update()
-        return pacguy
 
 
     def print_stuff(self, pacguy):
+        '''
+        Prints the title / pacmans score and lives
+
+        Args : pacguy (pacman) = instance of the pacman class
+        '''
         font1 = pygame.font.Font("Assets/pacfont.ttf", 16)
         font2 = pygame.font.Font(None, 30)
         font3 = pygame.font.Font("Assets/pacfont.ttf", 50)

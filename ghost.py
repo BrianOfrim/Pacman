@@ -3,27 +3,42 @@ from pygame.sprite import Sprite
 from binary_heap import BinaryHeap
 import random
 class ghost(Sprite):
+    #ghosts are the enimies of pacman
+    #the image used when the ghosts are in their normal state
     sprite = pygame.image.load("Assets/ghost1.png")
+    #the image used when the ghosts are in their scared state
     sprite1 = pygame.image.load("Assets/ghost_scared.png")
     def __init__(self,x,y,path_graph):
         Sprite.__init__(self)
         self.angle = 0
+        #map is the map that the ghost is to travel on
+        #the graph has nodes that are spaced 25 pixels apart
+        #these nodes represent path tiles
+        #ghosts make node to node movements 5 pixels at a time
         self.map = path_graph
+        #image for normal state
         self.image1 = ghost.sprite.convert()
+        #current image
         self.image = self.image1
         self.rect = self.image.get_rect()
-
+        #image for scared state
         self.image2 = ghost.sprite1.convert()
+        #node that the ghost is traveling to
         self.next_node = None
+        #imgnum is used to diaply the appropriate image
+        #imgnum = 1 for normal state and 2 for scarred state
         self.imgnum = 1
-        #closest_node = process_path.closest_node(x,y,path_graph)
+        #position of the upper left postion of the ghost sprite
+        #in screen coordinates
         self.rect.x = x
         self.rect.y = y
- 
+        #node the ghost is currently at or traveling from
         self.current_node = [x, y]
+        #initial coordiates
         self.start_x = x
         self.start_y = y
         self.derp = 0
+        #previous state of the ghost
         self.prev_num = self.imgnum
         
 
@@ -31,51 +46,45 @@ class ghost(Sprite):
         
 
     def move(self,pacman_x,pacman_y):
-        #check if the ghost is on the path, correct if nessarary
-        #if(self.angle == 180 or self.angle == 0):
-        #    if(self.rect.y != self.current_node[1]):
-        #        self.rect.y = self.current_node[1]
-
-        #if(self.angle == 270 or self.angle == 90):
-        #    if(self.rect.x != self.current_node[0]):
-        #        self.rect.x = self.current_node[0]
-
-        #check if ghost left the screen because somtimes they do
-        #if((self.rect.x < 0) or (self.rect.x > 575 )):
-        #    self.respawn()
-        #if((self.rect.y < 0) or (self.rect.y > 600 )):
-        #    self.respawn()
-        #bug fix to stop ghosts from leaving screen
+        '''
+        Called when the ghost is to move
+        
+        Args: pacman_x (int) = x coord of pacman in screen coordinates
+              pacman_y (int) = y coord of pacman in screen coordinates
+           
+        '''
+        #if the ghost is going form its normal state to its scrared state then
+        #make sure the ghost is on the path by re initializing its current and
+        # next node
         if((self.prev_num == 1) and (self.imgnum == 2)):
            self.make_sure_ghost_on_path()
         self.prev_num = self.imgnum
-
+        
         if self.imgnum == 1:
+            #normal state
             self.move_closest_path(pacman_x, pacman_y)
         else:
+            #scarred
             self.move_random()
             
 
     def move_closest_path(self,pacman_x,pacman_y):
-                #print("")
-        #print("ghost x {}".format(self.rect.x))
-        #print("ghost y {}".format(self.rect.y))
-        #print("Ghost1 x = {}",self.rect.x )
-        #print("Ghost1 y = {}",self.rect.y )
-        #print("Current_angle {}",self.angle )
-        #print("Before find_current_node")
-        #print("CN {}", self.current_node)
-        #self.valid_node_check()
+        '''
+        calcualtes the shortest path to pacman and move in that direction
+
+        Args: pacman_x (int) = x coord of pacman in screen coordinates
+              pacman_y (int) = y coord of pacman in screen coordinates
+
+        '''
+        #compute the position of the current node
         self.find_current_node()
-        #print("After find_current_node")
-        #print("CN {}", self.current_node)
-        #print("CN x {}".format(self.closest_node[0]))
-        #print("CN y {}".format(self.closest_node[1]))
+        #compute the shortest path
         path = self.least_cost_path(self.map,
                                   (self.current_node[0], self.current_node[1])
                                     ,(pacman_x,pacman_y),self.cost_distance)
+        #next node is set to the first move in the shortest path
         self.next_node = path[1]
-                
+        #movements are made and correct image is configured        
         dx = self.next_node[0] - self.current_node[0]
         dy = self.next_node[1] - self.current_node[1]
         if dx > 0:
@@ -102,6 +111,10 @@ class ghost(Sprite):
                 self.image = pygame.transform.flip(self.image2,True,False)
 
     def move_random(self):
+        '''
+        moves the pacman in the current direction and if a wall or 
+        intersection is approached then make a random choice
+        '''
         if self.angle == 0:
             self.rect.x += 5
         if self.angle == 90:
@@ -110,33 +123,45 @@ class ghost(Sprite):
             self.rect.x -= 5
         if self.angle == 270:
             self.rect.y += 5
+        #check if the ghost has reached the node it was traveling to
         if((self.rect.x == self.next_node[0]) and
            (self.rect.y == self.next_node[1])):
             self.current_node = self.next_node
+            #get the neighbours of the current node
             num_neighbours = process_path.num_neighbours((
                     self.current_node[0],self.current_node[1]),
                                                          self.map,self.angle)
+            
             if num_neighbours > 2:
+                #an intersection has been approached, make a random choice
                 self.random_choice()
                 return
+            #compute the next node in the current direction
             next_node = process_path.next_node((
                     self.current_node[0],self.current_node[1]),
-                                                    self.map,self.angle)     
+                                                    self.map,self.angle)
+            
             if(next_node == None):
+                #a wall has been approached so make a random choice
                 self.next_node = None
                 self.random_choice() 
                 return
+            #a node in the current direction exists
             self.next_node = [next_node[0], next_node[1]]
 
            
                
     def random_choice(self):
+        '''
+        makes a random choice for the next node
+        '''
         neighbours = self.map.neighbours((self.current_node[0]
                                           ,self.current_node[1]))
         next_node = random.choice(neighbours)
         if(next_node == None):
             print("No next node in the random state")
         self.next_node = [next_node[0], next_node[1]]
+        #compute the angle and configure the image
         dx = self.next_node[0]-self.current_node[0]
         dy = self.next_node[1]-self.current_node[1]
         if dx > 0:
@@ -160,6 +185,9 @@ class ghost(Sprite):
             
             
     def newimgrot(self):
+        '''
+        configure the image according to the current angle
+        '''
         if self.angle == 0:
             self.image = pygame.transform.rotate(self.image,0)
         if self.angle == 90:
@@ -170,7 +198,6 @@ class ghost(Sprite):
             self.image = pygame.transform.rotate(self.image,270)
 
     def least_cost_path(self,graph, start, dest, cost):
-        #pdb.set_trace()
         """
         Find and return the least cost path in graph from start
         vertex to dest vertex.
@@ -259,6 +286,9 @@ class ghost(Sprite):
         return distance
 
     def find_current_node(self):
+        '''
+        compute the current node based on the ghosts position and angle
+        '''
         if(self.angle == 0):
             self.current_node[0] = self.rect.x - (self.rect.x % 25)
             return
@@ -279,20 +309,23 @@ class ghost(Sprite):
 
 
     def respawn(self):
+        '''
+        Reinitialize the ghost to how it was at the stat of the game
+        '''
         self.imgnum = 1
-        self.angle = 0     
-        #closest_node = process_path.closest_node(self.rect.x,self.rect.y
-        #                                         ,self.map)
- 
+        self.angle = 0      
         self.current_node = [self.start_x, self.start_y]
         self.rect.x = self.start_x
         self.rect.y = self.start_y
         self.next_node = None
 
-    
-        #def valid_node_check(self);
+
 
     def make_sure_ghost_on_path(self):
+        '''
+        compute the current and next nodes based on where the ghost is
+        and its angle. Placr the ghost on the current node
+        '''
            
         current_node = process_path.closest_node(self.rect.x,
                                                      self.rect.y,self.map)
